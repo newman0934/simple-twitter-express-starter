@@ -1,5 +1,24 @@
 const express = require('express')
 const router = express.Router()
+const userController = require("../controllers/userController")
+const passport = require("../config/passport")
+
+const authenticated = (req, res, next) => {
+  if(req.isAuthenticated()){
+    return next()
+  }
+  res.redirect("/signin")
+}
+
+const authenticatedAdmin = (req, res, next) => {
+  if(req.isAuthenticated()){
+    if(req.user.role){
+      return next()
+    }
+    return res.redirect("/")
+  }
+  res.redirect("/signin")
+}
 
 router.get('/', (req, res) => res.redirect('/tweets'))
 router.get('/tweets', (req, res) => res.render('tweets'))
@@ -25,5 +44,15 @@ router.delete('/admin/tweets/:id', (req, res) =>
   res.send('delete /admin/tweets/:id')
 )
 router.get('/admin/users', (req, res) => res.render('admin/users'))
+
+router.get("/signin", userController.signInPage)
+router.post(
+  "/signin",
+  passport.authenticate("local", {
+      failureRedirect: "/signin",
+      failureFlash: true
+  }),
+  userController.signIn
+);
 
 module.exports = router
