@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const tweetController = require('./../controllers/tweetController')
+const adminController = require('./../controllers/adminController')
 
 router.get('/', (req, res) => res.redirect('/tweets'))
 router.get('/tweets', tweetController.getTweets)
@@ -22,10 +23,9 @@ router.post('/tweets/:id/like', (req, res) => res.send('post /tweets/:id/like'))
 router.post('/tweets', (req, res) => res.send('post /tweets/:id/unlike'))
 router.get('/users/:id/edit', (req, res) => res.render('user/edit'))
 router.post('/users/:id/edit', (req, res) => res.send('post /users/:id/edit'))
-router.get('/admin/tweets', (req, res) => res.render('admin/tweets'))
-router.delete('/admin/tweets/:id', (req, res) =>
-  res.send('delete /admin/tweets/:id')
-)
-router.get('/admin/users', (req, res) => res.render('admin/users'))
+
+router.get('/admin/tweets', adminController.getTweets)
+router.delete('/admin/tweets/:id', adminController.deleteTweet)
+router.get('/admin/users', adminController.getUsers)
 
 module.exports = router
