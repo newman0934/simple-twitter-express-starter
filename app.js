@@ -1,6 +1,7 @@
 const express = require('express')
 const helpers = require('./_helpers')
 const handlebars = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 const app = express()
 const port = 3000
@@ -12,6 +13,7 @@ app.engine(
     defaultLayout: 'main'
   })
 )
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // use helpers.getUser(req) to replace req.user
 // use helpers.ensureAuthenticated(req) to replace req.isAuthenticated()
