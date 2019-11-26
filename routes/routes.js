@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const tweetController = require('./../controllers/tweetController')
 
 router.get('/', (req, res) => res.redirect('/tweets'))
-router.get('/tweets', (req, res) => res.render('tweets'))
-router.post('/tweets', (req, res) => res.send('post /tweets'))
+router.get('/tweets', tweetController.getTweets)
+router.post('/tweets', tweetController.postTweets)
+
 router.get('/tweets/:tweet_id/replies', (req, res) => res.render('replies'))
 router.post('/tweets/:tweet_id/replies', (req, res) =>
   res.send('post /tweets/:tweet_id/replies')
