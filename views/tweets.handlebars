@@ -1,19 +1,30 @@
-<h1>GET /tweets</h1>
 <div class="row">
   <div class="col-8">
-    <form action="/tweets" method="POST">
-      <textarea name="description" id="" cols="50" rows="5" placeholder="what's on your mind"></textarea><br />
-      <button type="submit">Tweet</button>
-    </form>
     <div class="container">
+      {{!-- create Tweets --}}
+      <form action="/tweets" method="POST">
+        <div class="md-form">
+          <textarea name="description" class="md-textarea form-control" rows="3"></textarea>
+          <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Tweet</button>
+        </div>
+      </form>
+      {{!-- Tweets --}}
       {{#each tweets}}
-        <div class="card">
-          <h3>{{{this.id}}}</h3>
-          <p>{{{this.description}}}</p>
+        <div class="card my-1">
+          <div class="row">
+            <div class="col-2">
+              <img src="https://fakeimg.pl/150x150/" alt="">
+            </div>
+            <div class="col-10 p-2">
+              <h3>{{{this.id}}}</h3>
+              <p>{{{this.description}}}</p>
+            </div>
+          </div>
         </div>
       {{/each}}
     </div>
   </div>
+  {{!-- Popular Tweets --}}
   <div class="col-4">
     <h1>Popular</h1>
   </div>
