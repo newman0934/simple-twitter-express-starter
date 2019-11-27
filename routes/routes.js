@@ -21,7 +21,7 @@ router.delete('/followships/:followingId', (req, res) =>
 router.get('/users/:id/likes', (req, res) => res.render('user/like'))
 router.post('/tweets/:id/like', (req, res) => res.send('post /tweets/:id/like'))
 router.post('/tweets', (req, res) => res.send('post /tweets/:id/unlike'))
-router.get('/users/:id/edit', (req, res) => res.render('user/edit'))
+router.get('/users/:id/edit', userController.getUserEdit)
 router.post('/users/:id/edit', (req, res) => res.send('post /users/:id/edit'))
 
 router.get('/admin/tweets', adminController.getTweets)
