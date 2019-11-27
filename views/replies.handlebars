@@ -1,35 +1,75 @@
-<div class="row">
-  <div class="col-3">
-    <h1>user profile</h1>
-  </div>
-  <div class="col-9">
-    {{!-- Tweets --}}
-    <h1>Tweets</h1>
-    <div class="card my-1">
-      <div class="row">
-        <div class="col-2">
-          <img src="https://fakeimg.pl/150x150/" alt="">
+<section class="mt-4" id="replies">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="mb-2">
+            <img src="https://picsum.photos/id/237/200/300" alt="avatar" style="height:300px;width:300px">
+            <h1 class="mb-2">User name</h1>
+          </div>
+          <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores placeat ducimus non,
+            soluta cum unde eum ea quia. Eum voluptatibus ipsam quo similique labore facilis, perferendis esse magni
+            tenetur odit!
+          </p>
+          <ul class="list-group mb-2">
+            <li class="list-group-item">Tweets</li>
+            <li class="list-group-item">Followings</li>
+            <li class="list-group-item">Followers</li>
+            <li class="list-group-item">likes</li>
+          </ul>
+          <!--button-->
+          <div class="">
+            <button class="btn btn-outline-primary">Edit</button>
+          </div>
         </div>
-        <div class="col-10 p-2">
-          <h3>{{{tweet.id}}}</h3>
-          <p>{{{tweet.description}}}</p>
+      </div>
+      <div class="col-md-8">
+        {{!-- Tweets --}}
+        <h1>Tweets</h1>
+        <div class="card my-1">
+          <div class="row">
+            <div class="col-auto">
+              <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/">
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <a href="#">
+                  <span class="pt-2">@username</span>
+                </a>
+                <p>{{{tweet.description}}}</p>
+                <a href='#' class="mr-3">Reply(0)</a>
+                <a href='#' class="">Like(0)</a>
+              </div>
+            </div>
+          </div>
         </div>
+        {{!-- Replies --}}
+        <h1>Replies</h1>
+        {{#each replies}}
+          <div class="card my-1">
+            <div class="row">
+              <div class="col-auto">
+                <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/">
+              </div>
+              <div class="col">
+                <div class="card-block px-2">
+                  <a href="#">
+                    <span class="pt-2">@username</span>
+                  </a>
+                  <p>{{{this.comment}}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+        {{!-- Reply form --}}
+        <form class="mt-4" action="/tweets/1/replies" method="POST">
+          <div class="md-form">
+            <textarea name="description" class="md-textarea form-control" rows="6"></textarea>
+            <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Reply</button>
+          </div>
+        </form>
       </div>
     </div>
-    {{!-- Replies --}}
-    <h1>Replies</h1>
-    {{#each replies}}
-      <div class="card my-1">
-        <div class="row">
-          <div class="col-2">
-            <img src="https://fakeimg.pl/150x150/" alt="">
-          </div>
-          <div class="col-10 p-2">
-            <h3>{{{this.id}}}</h3>
-            <p>{{{this.comment}}}</p>
-          </div>
-        </div>
-      </div>
-    {{/each}}
   </div>
-</div>
+</section>

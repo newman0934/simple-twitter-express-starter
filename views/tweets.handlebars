@@ -1,31 +1,41 @@
-<div class="row">
-  <div class="col-8">
-    <div class="container">
-      {{!-- create Tweets --}}
-      <form action="/tweets" method="POST">
-        <div class="md-form">
-          <textarea name="description" class="md-textarea form-control" rows="3"></textarea>
-          <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Tweet</button>
-        </div>
-      </form>
-      {{!-- Tweets --}}
-      {{#each tweets}}
-        <div class="card my-1">
-          <div class="row">
-            <div class="col-2">
-              <img src="https://fakeimg.pl/150x150/" alt="">
+<section class="mt-4" id="tweets">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="container">
+          {{!-- create Tweets --}}
+          <form action="/tweets" method="POST">
+            <div class="md-form">
+              <textarea name="description" class="md-textarea form-control" rows="3"></textarea>
+              <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Tweet</button>
             </div>
-            <div class="col-10 p-2">
-              <h3>{{{this.id}}}</h3>
-              <p>{{{this.description}}}</p>
+          </form>
+          {{!-- Tweets --}}
+          {{#each tweets}}
+            <div class="card my-1">
+              <div class="row">
+                <div class="col-auto">
+                  <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/" alt="">
+                </div>
+                <div class="col p-2">
+                  <div class="card-block px-2">
+                    <a href="#">
+                      <span class="pt-2">@username</span>
+                    </a>
+                    <p>{{{this.description}}}</p>
+                    <a href='#' class="mr-3">Reply(0)</a>
+                    <a href='#' class="">Like(0)</a>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          {{/each}}
         </div>
-      {{/each}}
+      </div>
+      {{!-- Popular Tweets --}}
+      <div class="col-md-4">
+        <h1>Popular</h1>
+      </div>
     </div>
   </div>
-  {{!-- Popular Tweets --}}
-  <div class="col-4">
-    <h1>Popular</h1>
-  </div>
-</div>
+</section>
