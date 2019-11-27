@@ -5,10 +5,12 @@ const Reply = db.Reply
 
 const replyController = {
   getTweetReplies: (req, res) => {
-    return Tweet.findByPk(req.params.tweet_id, { include: Reply }).then(
+    return Tweet.findByPk(req.params.tweet_id, { include: [Reply, User] }).then(
       tweet => {
+        console.log(tweet)
         const replies = tweet.Replies
-        return res.render('replies', { tweet, replies })
+        const tweetUser = tweet.User
+        return res.render('replies', { tweet, replies, tweetUser })
       }
     )
   }
