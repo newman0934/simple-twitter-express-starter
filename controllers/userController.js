@@ -8,9 +8,14 @@ const userController = {
     return User.findByPk(req.params.id, {
       include: { model: Tweet, include: [Reply] }
     }).then(user => {
-      console.log(user)
       const tweets = user.Tweets
       res.render('user/user', { user, tweets })
+    })
+  },
+
+  getUserEdit: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      res.render('user/edit', { user })
     })
   }
 }
