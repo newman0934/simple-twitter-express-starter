@@ -18,7 +18,7 @@
           {{!-- button --}}
           <div class="mb-4">
             {{!-- 這邊要再寫一個 if user === currentUser 顯示 Edit Profile，否則顯示 Follow --}}
-            <a href="#" class="btn btn-outline-primary">Edit Profile</a>
+            <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
                     <span class="pt-2">{{../user.name}}</span>
                   </a>
                   <p>{{{this.description}}}</p>
-                  <a href='#' class="mr-3">Reply(0)</a>
+                  <a href='#' class="mr-3">Reply({{this.Replies.length}})</a>
                   <a href='#' class="">Like(0)</a>
                 </div>
               </div>
