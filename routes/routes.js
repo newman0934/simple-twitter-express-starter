@@ -9,10 +9,8 @@ router.get('/', (req, res) => res.redirect('/tweets'))
 router.get('/tweets', tweetController.getTweets)
 router.post('/tweets', tweetController.postTweets)
 
-router.get('/tweets/:tweet_id/replies', replyController.getTweetReplies)
-router.post('/tweets/:tweet_id/replies', (req, res) =>
-  res.send('post /tweets/:tweet_id/replies')
-)
+router.get('/tweets/:tweet_id/replies', replyController.getTweetReply)
+router.post('/tweets/:tweet_id/replies', replyController.postTweetReply)
 router.get('/users/:id/tweets', userController.getUserTweets)
 router.get('/users/:id/followings', (req, res) => res.render('user/followings'))
 router.get('/users/:id/followers', (req, res) => res.render('user/followers'))

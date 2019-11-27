@@ -15,8 +15,9 @@
             <li class="list-group-item">Followers</li>
             <li class="list-group-item">likes</li>
           </ul>
-          <!--button-->
-          <div class="">
+          {{!-- button --}}
+          <div class="mb-4">
+            {{!-- 需判斷是否為使用者決定按鈕 --}}
             <button class="btn btn-outline-primary">Edit</button>
           </div>
         </div>
@@ -61,9 +62,9 @@
           </div>
         {{/each}}
         {{!-- Reply form --}}
-        <form class="mt-4" action="/tweets/1/replies" method="POST">
+        <form class="mt-4" action="/tweets/{{{tweet.id}}}/replies" method="POST">
           <div class="md-form">
-            <textarea name="description" class="md-textarea form-control" rows="6"></textarea>
+            <textarea name="comment" class="md-textarea form-control" rows="6"></textarea>
             <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Reply</button>
           </div>
         </form>
