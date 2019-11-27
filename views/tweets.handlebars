@@ -15,15 +15,16 @@
             <div class="card my-1">
               <div class="row">
                 <div class="col-auto">
-                  <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/" alt="">
+                  <img class="img-responsive center-block" src="{{{this.User.avatar}}}"
+                    style="width: 150px; height: 150px;">
                 </div>
                 <div class="col p-2">
                   <div class="card-block px-2">
                     <a href="#">
-                      <span class="pt-2">@username</span>
+                      <span class="pt-2">{{{this.User.name}}}</span>
                     </a>
                     <p>{{{this.description}}}</p>
-                    <a href='#' class="mr-3">Reply(0)</a>
+                    <a href='#' class="mr-3">Reply({{{this.Replies.length}}})</a>
                     <a href='#' class="">Like(0)</a>
                   </div>
                 </div>

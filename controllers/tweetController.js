@@ -1,9 +1,11 @@
 const db = require('../models')
 const Tweet = db.Tweet
+const Reply = db.Reply
+const User = db.User
 
 const tweetController = {
   getTweets: (req, res) => {
-    return Tweet.findAll().then(tweets => {
+    return Tweet.findAll({ include: [Reply, User] }).then(tweets => {
       return res.render('tweets', { tweets })
     })
   },
