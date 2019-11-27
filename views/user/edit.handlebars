@@ -1,17 +1,20 @@
 <section class="mt-4" id="edit">
   <div class="container">
-    <form class="row">
+    <form action="/users/:id/edit" method="POST" class="row">
       <div class="col-md-2"></div>
       <div class="col-md-2">
         <div class="mb-2">
-          <img src="https://fakeimg.pl/300x300/" alt="avatar" style="height:150px;width:150px">
-          <input type="file" class="mt-2" id="image" name="image">
+          <img src="{{{user.avatar}}}" alt="avatar" style="height:150px;width:150px">
+          <label for="avatar" class="btn btn-primary btn-block mt-2">Browse files...</label>
+          {{!-- input tag is actually hided (see css) --}}
+          <input type="file" id="avatar" name="avatar">
         </div>
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control mb-4" placeholder="Name">
+        <input type="text" value={{{user.name}}} class="form-control mb-4" placeholder="Name">
         <textarea name="comment" class="md-textarea form-control" rows="6"
-          placeholder="type anything about you here..."></textarea>
+          placeholder="type anything about you here...">{{{user.introduction}}}</textarea>
+        <button type="submit" class="btn btn-primary d-block mt-2 ml-auto mr-0">Update</button>
       </div>
       <div class="col-md-2"></div>
     </form>
