@@ -9,10 +9,21 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+  <style>
+    label {
+      cursor: pointer;
+    }
+
+    #avatar {
+      opacity: 0;
+      position: absolute;
+      z-index: -1;
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
     <a class="navbar-brand" href="/">Simple Twitter</a>
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
@@ -23,7 +34,7 @@
         {{/ifCond}} 
         {{#if user}}
         <span style="color: white;margin-right: 10px;">Hi, {{user.email}}</span>
-        <a href="/users/{{user.id}}" style="color: white;margin-right: 10px;">Profile</a>
+        <a href="/users/{{user.id}}/tweets" style="color: white;margin-right: 10px;">Profile</a>
         <a href="/logout">
           <button class="btn btn-outline-success my-2 my-sm-0">LogOut</button>
         </a>
@@ -43,6 +54,7 @@
       </div>
     </div>
   </main>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
   crossorigin="anonymous"></script>

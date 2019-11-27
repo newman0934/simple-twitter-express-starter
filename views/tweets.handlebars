@@ -1,4 +1,80 @@
-<h1>tweets</h1>
-<h1>tweets</h1>
-<h1>tweets</h1>
-<h1>tweets</h1>
+<section class="mt-4" id="tweets">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="container">
+          {{!-- create Tweets --}}
+          <form action="/tweets" method="POST">
+            <div class="md-form">
+              <textarea name="description" class="md-textarea form-control" rows="3"></textarea>
+              <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Tweet</button>
+            </div>
+          </form>
+          {{!-- Tweets --}}
+          {{#each tweets}}
+            <div class="card my-1">
+              <div class="row">
+                <div class="col-auto">
+                  <img class="img-responsive center-block" src="{{{this.User.avatar}}}"
+                    style="width: 150px; height: 150px;">
+                </div>
+                <div class="col p-2">
+                  <div class="card-block px-2">
+                    <a href="#">
+                      <span class="pt-2">{{{this.User.name}}}</span>
+                    </a>
+                    <p>{{{this.description}}}</p>
+                    <a href='/tweets/{{{this.id}}}/replies' class="mr-3">Reply({{{this.Replies.length}}})</a>
+                    <a href='#' class="">Like(0)</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{!-- Popular Tweets --}}
+      <div class="col-md-4">
+        <h1>Popular</h1>
+        <div class="card my-1">
+          <div class="row">
+            <div class="col-auto">
+              <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/"
+                style="width: 150px; height: 150px;">
+            </div>
+            <div class="col p-2">
+              <div class="card-block px-2">
+                <a href="#">
+                  <span class="pt-2">@username</span>
+                </a>
+                <p>still fake data Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores,</p>
+                <form action="/followships" method="POST">
+                  <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card my-1">
+          <div class="row">
+            <div class="col-auto">
+              <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/"
+                style="width: 150px; height: 150px;">
+            </div>
+            <div class="col p-2">
+              <div class="card-block px-2">
+                <a href="#">
+                  <span class="pt-2">@username</span>
+                </a>
+                <p>still fake data Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores,</p>
+                <form action="/followships" method="POST">
+                  <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
