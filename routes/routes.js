@@ -44,7 +44,8 @@ router.delete('/admin/tweets/:id', (req, res) =>
   res.send('delete /admin/tweets/:id')
 )
 router.get('/admin/users', (req, res) => res.render('admin/users'))
-
+router.get("/signup", userController.signUpPage)
+router.post("/signup", userController.signUp)
 router.get("/signin", userController.signInPage)
 router.post(
   "/signin",
