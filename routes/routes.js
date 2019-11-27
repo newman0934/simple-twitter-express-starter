@@ -2,12 +2,13 @@ const express = require('express')
 const router = express.Router()
 const tweetController = require('./../controllers/tweetController')
 const adminController = require('./../controllers/adminController')
+const replyController = require('./../controllers/replyController')
 
 router.get('/', (req, res) => res.redirect('/tweets'))
 router.get('/tweets', tweetController.getTweets)
 router.post('/tweets', tweetController.postTweets)
 
-router.get('/tweets/:tweet_id/replies', (req, res) => res.render('replies'))
+router.get('/tweets/:tweet_id/replies', replyController.getTweetReplies)
 router.post('/tweets/:tweet_id/replies', (req, res) =>
   res.send('post /tweets/:tweet_id/replies')
 )
