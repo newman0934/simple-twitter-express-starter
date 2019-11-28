@@ -5,6 +5,9 @@ const passport = require('../config/passport')
 const tweetController = require('./../controllers/tweetController')
 const adminController = require('./../controllers/adminController')
 const replyController = require('./../controllers/replyController')
+//include multer
+const multer = require('multer')
+const upload = multer({ dest: 'temp/' })
 
 const helpers = require('../_helpers')
 
@@ -62,9 +65,8 @@ router.post('/tweets', authenticated, (req, res) =>
   res.send('post /tweets/:id/unlike')
 )
 router.get('/users/:id/edit', authenticated, userController.getUserEdit)
-router.post('/users/:id/edit', authenticated, (req, res) =>
-  res.send('post /users/:id/edit')
-)
+router.post('/users/:id', authenticated, upload.single('avatar'), userController.postUser)
+
 router.get('/admin/tweets', authenticatedAdmin, adminController.getTweets)
 router.delete(
   '/admin/tweets/:id',

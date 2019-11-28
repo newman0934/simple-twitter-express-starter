@@ -5,6 +5,8 @@ const Tweet = db.Tweet
 const Reply = db.Reply
 const Followship = db.Followship
 const { Op } = (sequelize = require('sequelize'))
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 let userController = {
   signInPage: (req, res) => {
@@ -75,6 +77,44 @@ let userController = {
     return User.findByPk(req.params.id).then(user => {
       res.render('user/edit', { user })
     })
+  },
+
+  //編輯使用者資料
+  postUser: (req, res) => {
+    if (Number(req.params.id) !== Number(req.user.id)) {
+      return res.redirect('back')
+    }
+
+    const { file } = req
+    if (file) {
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
+        return User.findByPk(req.params.id)
+          .then(user => {
+            console.log(img.data.link)
+            user.update({
+              name: req.body.name,
+              introduction: req.body.introduction,
+              avatar: file ? img.data.link : null,
+            }).then(user => {
+              req.flash('success_messages', `${user.name} was successfully to update.`)
+              res.redirect(`/users/${user.id}/tweets`)
+            })
+          })
+      })
+    } else {
+      return User.findByPk(req.params.id)
+        .then(user => {
+          user.update({
+            name: req.body.name,
+            introduction: req.body.introduction,
+            avatar: user.avatar
+          }).then(user => {
+            req.flash('success_messages', `${user.name} was successfully to update.`)
+            res.redirect(`/users/${user.id}/tweets`)
+          })
+        })
+    }
   },
 
   addFollowing: (req, res) => {
