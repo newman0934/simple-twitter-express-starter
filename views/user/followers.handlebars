@@ -5,26 +5,21 @@
         <!--user profile-->
         <div class="text-center">
           <div class="mb-2">
-            <img src="https://picsum.photos/id/237/200/300" alt="avatar" style="height:300px;width:300px">
-            <h1 class="mb-2">User name</h1>
+            <img src="{{{user.avatar}}}" alt="avatar" style="height:300px;width:300px">
+            <h1 class="mb-2">{{{user.name}}}</h1>
           </div>
-          <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores placeat ducimus non,
-            soluta cum unde eum ea quia. Eum voluptatibus ipsam quo similique labore facilis, perferendis esse magni
-            tenetur odit!
+          <p class="mb-2">{{{user.introduction}}}
           </p>
-
           <ul class="list-group mb-2">
             <li class="list-group-item">Tweets</li>
             <li class="list-group-item">Followings</li>
             <li class="list-group-item">Followers</li>
             <li class="list-group-item">likes</li>
           </ul>
-
           <!--button-->
           <div class="">
             <button class="btn btn-outline-primary">Edit</button>
           </div>
-
         </div>
       </div>
       <div class="col-md-8">
@@ -45,12 +40,10 @@
                     </a>
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos quo veritatis beatae provident ab
                       ...</p>
-
                     <!--button-->
                     <form action="/users/:id?_method=DELETE/followers" method="POST" style="display: inline;">
                       <button type="submit" class="btn btn-danger">Unfollow</button>
                     </form>
-
                     <form action="/users/:id/followers" method="POST" style="display: inline;">
                       <button type="submit" class="btn btn-primary">Follow</button>
                     </form>
@@ -76,12 +69,10 @@
                     </a>
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos quo veritatis beatae provident ab
                       ...</p>
-
                     <!--button-->
                     <form action="/users/:id?_method=DELETE/followings" method="POST" style="display: inline;">
                       <button type="submit" class="btn btn-danger">Unfollow</button>
                     </form>
-
                     <form action="/users/:id/followings" method="POST" style="display: inline;">
                       <button type="submit" class="btn btn-primary">Follow</button>
                     </form>
@@ -92,8 +83,6 @@
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
