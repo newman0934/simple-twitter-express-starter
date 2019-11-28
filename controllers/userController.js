@@ -53,10 +53,16 @@ let userController = {
   },
   getUserTweets: (req, res) => {
     return User.findByPk(req.params.id, {
-      include: { model: Tweet, include: [Reply] }
+      include: [
+        { model: Tweet, include: [Reply] },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
     }).then(user => {
+      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
       const tweets = user.Tweets
-      res.render('user/user', { user, tweets })
+      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      res.render('user/user', { user, tweets, isCurrentUser, isFollowed })
     })
   },
 
@@ -69,7 +75,7 @@ let userController = {
   addFollowing: (req, res) => {
     return Followship.create({
       followerId: req.user.id,
-      followingId: req.params.id
+      followingId: req.body.id
     }).then(followship => {
       return res.redirect('back')
     })
@@ -79,11 +85,15 @@ let userController = {
     return Followship.findOne({
       where: {
         followerId: req.user.id,
-        followingId: req.params.userId
+        followingId: req.params.followingId
       }
-    }).then(followship => {
-      return res.redirect('back')
     })
+      .then(followship => {
+        followship.destroy()
+      })
+      .then(followship => {
+        return res.redirect('back')
+      })
   }
 }
 
