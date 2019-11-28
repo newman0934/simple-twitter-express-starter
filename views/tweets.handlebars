@@ -6,7 +6,7 @@
           {{!-- create Tweets --}}
           <form action="/tweets" method="POST">
             <div class="md-form">
-              <textarea name="description" class="md-textarea form-control" rows="3"></textarea>
+              <textarea name="description" class="md-textarea form-control" rows="3" maxlength="140"></textarea>
               <button type="submit" class="btn btn-primary my-1 d-block mr-0 ml-auto">Tweet</button>
             </div>
           </form>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col p-2">
                   <div class="card-block px-2">
-                    <a href="#">
+                    <a href="/users/{{{this.User.id}}}/tweets">
                       <span class="pt-2">{{{this.User.name}}}</span>
                     </a>
                     <p>{{{this.description}}}</p>
