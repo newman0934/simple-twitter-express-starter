@@ -43,11 +43,15 @@ router.post(
 )
 
 router.get('/users/:id/tweets', authenticated, userController.getUserTweets)
-router.get('/users/:id/followings', authenticated, (req, res) =>
-  res.render('user/followings')
+router.get(
+  '/users/:id/followings',
+  authenticated,
+  userController.getUserFollowings
 )
-router.get('/users/:id/followers', authenticated, (req, res) =>
-  res.render('user/followers')
+router.get(
+  '/users/:id/followers',
+  authenticated,
+  userController.getUserFollowers
 )
 router.post('/followships', authenticated, userController.addFollowing)
 router.delete(

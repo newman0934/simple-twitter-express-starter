@@ -1,101 +1,64 @@
 <section class="mt-4" id="followings">
-  <div class=" container">
+  <div class="container">
     <div class="row">
       <div class="col-md-4">
         <!--user profile-->
         <div class="text-center">
           <div class="mb-2">
-            <img src="https://picsum.photos/id/237/200/300" alt="avatar" style="height:300px;width:300px">
-            <h1 class="mb-2">User name</h1>
+            <img src="{{{user.avatar}}}" alt="avatar" style="height:300px;width:300px">
+            <h1 class="mb-2">{{{user.name}}}</h1>
           </div>
-          <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores placeat ducimus non,
-            soluta cum unde eum ea quia. Eum voluptatibus ipsam quo similique labore facilis, perferendis esse magni
-            tenetur odit!
+          <p class="mb-2">{{{user.introduction}}}
           </p>
-
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets</li>
-            <li class="list-group-item">Followings</li>
-            <li class="list-group-item">Followers</li>
+            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
+            <li class="list-group-item">Followings {{{user.Followings.length}}}</li>
+            <li class="list-group-item">Followers {{{user.Followers.length}}}</li>
             <li class="list-group-item">likes</li>
           </ul>
-
           <!--button-->
           <div class="">
             <button class="btn btn-outline-primary">Edit</button>
           </div>
-
         </div>
       </div>
       <div class="col-md-8">
         <h1 class="p-2">Followings</h1>
         <div class="row">
-          <!--tweets card-->
-          <div class="col-md-6 p-2">
-            <div class="card shadow-sm">
-              <div class="row">
-                <div class="col-auto">
-                  <img class="img-responsive center-block" src="https://picsum.photos/id/237/200/300"
-                    style="height:150px;width:150px">
-                </div>
-                <div class="col">
-                  <div class="card-block">
-                    <a href="#">
-                      <span class="pt-2">@username</span>
-                    </a>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos quo veritatis beatae provident ab
-                      ...</p>
-
-                    <!--button-->
-                    <form action="/users/:id?_method=DELETE/followings" method="POST" style="display: inline;">
-                      <button type="submit" class="btn btn-danger">Unfollow</button>
-                    </form>
-
-                    <form action="/users/:id/followings" method="POST" style="display: inline;">
-                      <button type="submit" class="btn btn-primary">Follow</button>
-                    </form>
-                    <!--end of button-->
+          <!--followings card-->
+          {{#each user.Followings}}
+            <div class="col-md-6 p-2">
+              <div class="card shadow-sm">
+                <div class="row">
+                  <div class="col-auto">
+                    <img class="img-responsive center-block" src="{{{this.avatar}}}" style="height:150px;width:150px">
                   </div>
+                  <div class="col">
+                    <div class="card-block">
+                      <a href="#">
+                        <span class="pt-2">{{{this.name}}}</span>
+                      </a>
+                      <p>{{{this.introduction}}}</p>
+                      <!--button-->
+                      {{#if this.followerHaveCurrentUser}}
+                        <form action="/followships/{{{this.id}}}?_method=DELETE" method="POST" style="display: inline;">
+                          <button type="submit" class="btn btn-danger mb-2">Unfollow</button>
+                        </form>
+                      {{else}}
+                        <form action="/followships" method="POST">
+                          <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                          <button type="submit" class="btn btn-primary mb-2">Follow</button>
+                        </form>
+                      {{/if}}
+                      <!--end of button-->
+                    </div>
+                  </div>
+                  <hr>
                 </div>
-                <hr>
               </div>
             </div>
-          </div>
+          {{/each}}
           <!--end of card-->
-          <div class="col-md-6 p-2">
-            <div class="card shadow-sm">
-              <div class="row">
-                <div class="col-auto">
-                  <img class="img-responsive center-block" src="https://picsum.photos/id/237/200/300"
-                    style="height:150px;width:150px">
-                </div>
-                <div class="col">
-                  <div class="card-block">
-                    <a href="#">
-                      <span class="pt-2">@username</span>
-                    </a>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos quo veritatis beatae provident ab
-                      ...</p>
-
-                    <!--button-->
-                    <form action="/users/:id?_method=DELETE/followings" method="POST" style="display: inline;">
-                      <button type="submit" class="btn btn-danger">Unfollow</button>
-                    </form>
-
-                    <form action="/users/:id/followings" method="POST" style="display: inline;">
-                      <button type="submit" class="btn btn-primary">Follow</button>
-                    </form>
-                    <!--end of button-->
-                  </div>
-                </div>
-                <hr>
-              </div>
-            </div>
-          </div>
-
-
-
-
         </div>
       </div>
     </div>
