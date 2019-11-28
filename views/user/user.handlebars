@@ -2,7 +2,6 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-
         {{!-- user profile --}}
         <div class="text-center">
           <div class="mb-2">
@@ -10,18 +9,28 @@
             <h1 class="mb-2">{{{ user.name }}}</h1>
           </div>
           <p class="mb-2">{{{user.introduction}}}</p>
-
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets</li>
-            <li class="list-group-item">Followings</li>
-            <li class="list-group-item">Followers</li>
-            <li class="list-group-item">likes</li>
+            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
+            <li class="list-group-item">Following {{{user.Followings.length}}}</li>
+            <li class="list-group-item">Follower {{{user.Followers.length}}}</li>
+            <li class="list-group-item">like</li>
           </ul>
-
           {{!-- button --}}
           <div class="mb-4">
-            {{!-- 這邊要再寫一個 if user === currentUser 顯示 Edit Profile，否則顯示 Follow --}}
-            <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
+            {{#if isCurrentUser}}
+              <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
+            {{else}}
+              {{#if isFollowed}}
+                <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger">Unfollow</button>
+                </form>
+              {{else}}
+                <form action="/followships" method="POST">
+                  <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+                  <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+              {{/if}}
+            {{/if}}
           </div>
         </div>
       </div>
@@ -36,11 +45,11 @@
               </div>
               <div class="col">
                 <div class="card-block px-2">
-                  <a href="#">
-                    <span class="pt-2">{{../user.name}}</span>
+                  <a href="/users/{{{../user.id}}}/tweets">
+                    <span class="pt-2">{{{../user.name}}}</span>
                   </a>
                   <p>{{{this.description}}}</p>
-                  <a href='#' class="mr-3">Reply({{this.Replies.length}})</a>
+                  <a href="/tweets/{{{this.id}}}/replies" class="mr-3">Reply({{{this.Replies.length}}})</a>
                   <a href='#' class="">Like(0)</a>
                 </div>
               </div>
