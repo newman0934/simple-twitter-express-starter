@@ -45,7 +45,8 @@ let userController = {
               req.body.password,
               bcrypt.genSaltSync(10),
               null
-            )
+            ),
+            avatar: 'https://fakeimg.pl/300x300/'
           }).then(user => {
             return res.redirect('/signin')
           })
@@ -115,6 +116,47 @@ let userController = {
           })
         })
     }
+  },
+  getUserFollowings: (req, res) => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, include: [Reply] },
+        { model: User, as: 'Followers' },
+        {
+          model: User,
+          as: 'Followings',
+          include: { model: User, as: 'Followers' }
+        }
+      ]
+    }).then(user => {
+      /* 
+        1. 遍歷 user.Following 找到該 user 的追蹤者
+        2. 遍歷 該 user 追蹤者中的追隨者
+        3. 如果追隨者中包含 user 就傳入 followerHaveCurrentUser 為 true
+      */
+      for (let i = 0; i < user.Followings.length; i++) {
+        for (let j = 0; j < user.Followings[i].Followers.length; j++) {
+          if (+user.Followings[i].Followers[j].id === req.user.id) {
+            user.Followings[i].followerHaveCurrentUser = true
+          }
+        }
+      }
+      console.log(user.Followings[0])
+      res.render('user/followings', { user })
+    })
+  },
+
+  getUserFollowers: (req, res) => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, include: [Reply] },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
+    }).then(user => {
+      console.log(user)
+      res.render('user/followers', { user })
+    })
   },
 
   addFollowing: (req, res) => {
