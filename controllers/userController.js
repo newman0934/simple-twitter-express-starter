@@ -43,7 +43,8 @@ let userController = {
               req.body.password,
               bcrypt.genSaltSync(10),
               null
-            )
+            ),
+            avatar: 'https://fakeimg.pl/300x300/'
           }).then(user => {
             return res.redirect('/signin')
           })
@@ -78,13 +79,27 @@ let userController = {
   },
 
   getUserFollowings: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, include: [Reply] },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
+    }).then(user => {
+      console.log(user)
       res.render('user/followings', { user })
     })
   },
 
   getUserFollowers: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, include: [Reply] },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
+    }).then(user => {
+      console.log(user)
       res.render('user/followers', { user })
     })
   },
