@@ -56,6 +56,7 @@ let userController = {
   },
   logout: (req, res) => {
     req.flash('success_messages', '登出成功')
+    req.session.destroy()
     req.logout()
     res.redirect('/signin')
   },
