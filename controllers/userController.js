@@ -3,6 +3,7 @@ const db = require("../models")
 const User = db.User
 const Tweet = db.Tweet
 const Reply = db.Reply
+const { Op } = sequelize = require('sequelize')
 
 let userController = {
     signInPage: (req, res) => {
@@ -20,18 +21,25 @@ let userController = {
             req.flash("error_messages", "兩次密碼輸入不同")
             return res.redirect("/signup")
         } else {
+            const { name, email, password, passwordCheck } = req.body
+            if (!name || !email || !password || !passwordCheck) {
+                return req.flash("error_messages", "所有欄位皆為必填")
+            }
             User.findOne({
                 where: {
-                    email: req.body.email
+                    [Op.or]: [
+                        { email }, { name }
+                    ]
                 }
             }).then(user => {
                 if (user) {
-                    req.flash("error_messages", "信箱重複")
-                    return res.redirect("/signup")
+                    let errors = []
+                    errors.push({ message: "使用者名稱或信箱重複" })
+                    return res.render("signup", { errors, name, email })
                 } else {
                     User.create({
-                        name: req.body.name,
-                        email: req.body.email,
+                        name,
+                        email,
                         password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
                     }).then(user => {
                         return res.redirect("/signin")
@@ -47,18 +55,18 @@ let userController = {
     },
     getUserTweets: (req, res) => {
         return User.findByPk(req.params.id, {
-          include: { model: Tweet, include: [Reply] }
+            include: { model: Tweet, include: [Reply] }
         }).then(user => {
-          const tweets = user.Tweets
-          res.render('user/user', { user, tweets })
+            const tweets = user.Tweets
+            res.render('user/user', { user, tweets })
         })
-      },
-    
-      getUserEdit: (req, res) => {
+    },
+
+    getUserEdit: (req, res) => {
         return User.findByPk(req.params.id).then(user => {
-          res.render('user/edit', { user })
+            res.render('user/edit', { user })
         })
-      }
+    }
 }
 
 module.exports = userController

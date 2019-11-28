@@ -6,17 +6,18 @@ const tweetController = require('./../controllers/tweetController')
 const adminController = require('./../controllers/adminController')
 const replyController = require('./../controllers/replyController')
 
+const helpers = require('../_helpers')
 
 const authenticated = (req, res, next) => {
-  if(req.isAuthenticated()){
+  if (helpers.ensureAuthenticated(req)) {
     return next()
   }
   res.redirect("/signin")
 }
 
 const authenticatedAdmin = (req, res, next) => {
-  if(req.isAuthenticated()){
-    if(req.user.role){
+  if (helpers.ensureAuthenticated(req)) {
+    if (req.user.role) {
       return next()
     }
     return res.redirect("/")
@@ -32,8 +33,8 @@ router.post('/tweets/:tweet_id/replies', authenticated, replyController.postTwee
 
 router.get('/users/:id/tweets', authenticated, userController.getUserTweets)
 router.get('/users/:id/followings', authenticated, (req, res) => res.render('user/followings'))
-router.get('/users/:id/followers',authenticated,  (req, res) => res.render('user/followers'))
-router.post('/followships',authenticated, (req, res) => res.send('post /followships'))
+router.get('/users/:id/followers', authenticated, (req, res) => res.render('user/followers'))
+router.post('/followships', authenticated, (req, res) => res.send('post /followships'))
 router.delete('/followships/:followingId', authenticated, (req, res) =>
   res.send('delete /followships/:followingId')
 )
@@ -42,7 +43,7 @@ router.post('/tweets/:id/like', authenticated, (req, res) => res.send('post /twe
 router.post('/tweets', authenticated, (req, res) => res.send('post /tweets/:id/unlike'))
 router.get('/users/:id/edit', authenticated, userController.getUserEdit)
 router.post('/users/:id/edit', authenticated, (req, res) => res.send('post /users/:id/edit'))
-router.get('/admin/tweets', authenticatedAdmin,  adminController.getTweets)
+router.get('/admin/tweets', authenticatedAdmin, adminController.getTweets)
 router.delete('/admin/tweets/:id', authenticatedAdmin, adminController.deleteTweet)
 
 
@@ -54,10 +55,10 @@ router.get("/signin", userController.signInPage)
 router.post(
   "/signin",
   passport.authenticate("local", {
-      failureRedirect: "/signin",
-      failureFlash: true
+    failureRedirect: "/signin",
+    failureFlash: true
   }),
   userController.signIn
 );
-router.get("/logout",userController.logout)
+router.get("/logout", userController.logout)
 module.exports = router
