@@ -71,7 +71,12 @@ let userController = {
       const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
       const tweets = user.Tweets
       const isCurrentUser = +req.user.id === +req.params.id ? true : false
-      res.render('user/user', { user, tweets, isCurrentUser, isFollowed })
+      res.render('user/user', {
+        user,
+        tweets,
+        isCurrentUser,
+        isFollowed
+      })
     })
   },
 
@@ -89,33 +94,40 @@ let userController = {
 
     const { file } = req
     if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
-        return User.findByPk(req.params.id)
-          .then(user => {
-            console.log(img.data.link)
-            user.update({
+        return User.findByPk(req.params.id).then(user => {
+          user
+            .update({
               name: req.body.name,
               introduction: req.body.introduction,
-              avatar: file ? img.data.link : null,
-            }).then(user => {
-              req.flash('success_messages', `${user.name} was successfully to update.`)
+              avatar: file ? img.data.link : null
+            })
+            .then(user => {
+              req.flash(
+                'success_messages',
+                `${user.name} was successfully to update.`
+              )
               res.redirect(`/users/${user.id}/tweets`)
             })
-          })
+        })
       })
     } else {
-      return User.findByPk(req.params.id)
-        .then(user => {
-          user.update({
+      return User.findByPk(req.params.id).then(user => {
+        user
+          .update({
             name: req.body.name,
             introduction: req.body.introduction,
             avatar: user.avatar
-          }).then(user => {
-            req.flash('success_messages', `${user.name} was successfully to update.`)
+          })
+          .then(user => {
+            req.flash(
+              'success_messages',
+              `${user.name} was successfully to update.`
+            )
             res.redirect(`/users/${user.id}/tweets`)
           })
-        })
+      })
     }
   },
   getUserFollowings: (req, res) => {
@@ -142,7 +154,6 @@ let userController = {
           }
         }
       }
-      console.log(user.Followings[0])
       res.render('user/followings', { user })
     })
   },
@@ -155,7 +166,6 @@ let userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      console.log(user)
       res.render('user/followers', { user })
     })
   },
@@ -170,18 +180,16 @@ let userController = {
   },
 
   removeFollowing: (req, res) => {
-    return Followship.findOne({
+    console.log('req.user.id: ' + req.user.id)
+    console.log('req.params.followingId: ' + req.params.followingId)
+    return Followship.destroy({
       where: {
         followerId: req.user.id,
         followingId: req.params.followingId
       }
+    }).then(() => {
+      return res.redirect('back')
     })
-      .then(followship => {
-        followship.destroy()
-      })
-      .then(followship => {
-        return res.redirect('back')
-      })
   }
 }
 
