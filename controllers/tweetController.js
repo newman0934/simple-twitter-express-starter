@@ -11,11 +11,14 @@ const tweetController = {
   },
   postTweets: (req, res) => {
     if (!req.body.description) {
-      console.error('must input description')
+      req.flash('error_messages', 'must input description')
       return res.redirect('/tweets')
     }
+    if (req.body.description.length > 140) return 'description is > 140'
+    console.log(req.user)
     return Tweet.create({
-      description: req.body.description
+      description: req.body.description,
+      UserId: req.user.id
     }).then(tweet => {
       res.redirect('/tweets')
     })
