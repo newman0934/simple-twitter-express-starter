@@ -6,15 +6,17 @@ const tweetController = require('./../controllers/tweetController')
 const adminController = require('./../controllers/adminController')
 const replyController = require('./../controllers/replyController')
 
+const helpers = require('../_helpers')
+
 const authenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (helpers.ensureAuthenticated(req)) {
     return next()
   }
   res.redirect('/signin')
 }
 
 const authenticatedAdmin = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (helpers.ensureAuthenticated(req)) {
     if (req.user.role) {
       return next()
     }
