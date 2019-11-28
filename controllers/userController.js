@@ -77,6 +77,18 @@ let userController = {
     })
   },
 
+  getUserFollowings: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      res.render('user/followings', { user })
+    })
+  },
+
+  getUserFollowers: (req, res) => {
+    return User.findByPk(req.params.id).then(user => {
+      res.render('user/followers', { user })
+    })
+  },
+
   addFollowing: (req, res) => {
     return Followship.create({
       followerId: req.user.id,
