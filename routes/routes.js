@@ -20,7 +20,7 @@ const authenticated = (req, res, next) => {
 
 const authenticatedAdmin = (req, res, next) => {
   if (helpers.ensureAuthenticated(req)) {
-    if (req.user.role) {
+    if (helpers.getUser(req).role) {
       return next()
     }
     return res.redirect('/')

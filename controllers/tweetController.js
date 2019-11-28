@@ -2,6 +2,7 @@ const db = require('../models')
 const Tweet = db.Tweet
 const Reply = db.Reply
 const User = db.User
+const helpers = require('../_helpers')
 
 const tweetController = {
   getTweets: (req, res) => {
@@ -15,10 +16,9 @@ const tweetController = {
       return res.redirect('/tweets')
     }
     if (req.body.description.length > 140) return 'description is > 140'
-    console.log(req.user)
     return Tweet.create({
       description: req.body.description,
-      UserId: req.user.id
+      UserId: helpers.getUser(req).id
     }).then(tweet => {
       res.redirect('/tweets')
     })
