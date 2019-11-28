@@ -180,8 +180,6 @@ let userController = {
   },
 
   removeFollowing: (req, res) => {
-    console.log('req.user.id: ' + req.user.id)
-    console.log('req.params.followingId: ' + req.params.followingId)
     return Followship.destroy({
       where: {
         followerId: req.user.id,
