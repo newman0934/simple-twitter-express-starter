@@ -64,7 +64,8 @@ let userController = {
   getUserTweets: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
-        { model: Tweet, include: [Reply] },
+        Like,
+        { model: Tweet, include: [Reply, Like] },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
       ]
@@ -72,6 +73,11 @@ let userController = {
       const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
       const tweets = user.Tweets
       const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      tweets.map(tweet => {
+        tweet.Likes.map(like => {
+          if (like.UserId === req.user.id) return (tweet.likedByUser = true)
+        })
+      })
       res.render('user/user', {
         user,
         tweets,

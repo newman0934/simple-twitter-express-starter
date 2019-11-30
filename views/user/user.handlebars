@@ -1,3 +1,4 @@
+{{!-- /users/:id/tweets --}}
 <section class="mt-4" id="user">
   <div class="container">
     <div class="row">
@@ -10,10 +11,12 @@
           </div>
           <p class="mb-2">{{{user.introduction}}}</p>
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
-            <li class="list-group-item">Following {{{user.Followings.length}}}</li>
-            <li class="list-group-item">Follower {{{user.Followers.length}}}</li>
-            <li class="list-group-item">like</li>
+            <li class="list-group-item"><a href="#">Tweets {{{user.Tweets.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followings">Following
+                {{{user.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followers">Follower
+                {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">like {{{user.Likes.length}}}</a></li>
           </ul>
           {{!-- button --}}
           <div class="mb-4">
@@ -49,7 +52,20 @@
                   </a>
                   <p>{{{this.description}}}</p>
                   <a href="/tweets/{{{this.id}}}/replies" class="mr-3">Reply({{{this.Replies.length}}})</a>
-                  <a href='#' class="">Like(0)</a>
+                  {{!-- Like button start --}}
+                  {{#if likedByUser}}
+                    <form action="/tweets/{{{this.id}}}/unlike" method="POST" class="d-inline ">
+                      <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                      <button type="submit"
+                        class="btn text-danger btn-link p-0">Unlike({{{this.Likes.length}}})</button>
+                    </form>
+                  {{else}}
+                    <form action="/tweets/{{{this.id}}}/like" method="POST" class="d-inline ">
+                      <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                      <button type="submit" class="btn btn-link p-0">Like({{{this.Likes.length}}})</button>
+                    </form>
+                  {{/if}}
+                  {{!-- Like button end --}}
                 </div>
               </div>
               <hr>
