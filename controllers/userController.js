@@ -162,7 +162,9 @@ let userController = {
           }
         }
       }
-      res.render('user/followings', { user })
+      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      res.render('user/followings', { user, isCurrentUser })
     })
   },
 

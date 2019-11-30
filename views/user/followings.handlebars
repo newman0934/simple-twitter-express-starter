@@ -19,8 +19,21 @@
             <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">likes {{{user.Likes.length}}}</a></li>
           </ul>
           <!--button-->
-          <div class="">
-            <button class="btn btn-outline-primary">Edit</button>
+          <div>
+            {{#if isCurrentUser}}
+              <button class="btn btn-outline-primary">Edit</button>
+            {{else}}
+              {{#if isFollowed}}
+                <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger">Unfollow</button>
+                </form>
+              {{else}}
+                <form action="/followships" method="POST">
+                  <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+                  <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+              {{/if}}
+            {{/if}}
           </div>
         </div>
       </div>
