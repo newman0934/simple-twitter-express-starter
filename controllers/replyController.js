@@ -5,13 +5,34 @@ const Reply = db.Reply
 
 const replyController = {
   getTweetReply: (req, res) => {
-    return Tweet.findByPk(req.params.tweet_id, { include: [Reply, User] }).then(
-      tweet => {
-        const replies = tweet.Replies
-        const tweetUser = tweet.User
-        return res.render('replies', { tweet, replies, tweetUser })
-      }
-    )
+    return Tweet.findByPk(req.params.tweet_id, {
+      include: [
+        { model: Reply, include: [User] },
+        {
+          model: User,
+          include: [
+            Tweet,
+            { model: User, as: 'Followers' },
+            { model: User, as: 'Followings' }
+          ]
+        }
+      ]
+    }).then(tweet => {
+      const replies = tweet.Replies
+      const tweetUser = tweet.User
+      const currentUser = req.user
+      const isFollowed = tweetUser.Followers.map(d => d.id).includes(
+        currentUser.id
+      )
+      console.log(isFollowed)
+      return res.render('replies', {
+        tweet,
+        replies,
+        tweetUser,
+        currentUser,
+        isFollowed
+      })
+    })
   },
 
   postTweetReply: (req, res) => {
@@ -21,6 +42,7 @@ const replyController = {
     }
     return Reply.create({
       comment: req.body.comment,
+      UserId: req.user.id,
       TweetId: req.params.tweet_id
     }).then(reply => {
       res.redirect('back')
