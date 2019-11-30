@@ -11,14 +11,28 @@
           <p class="mb-2">{{{user.introduction}}}
           </p>
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
-            <li class="list-group-item">Followings {{{user.Followings.length}}}</li>
-            <li class="list-group-item">Followers {{{user.Followers.length}}}</li>
-            <li class="list-group-item">likes</li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/tweets">Tweets {{{user.Tweets.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followings">Followings
+                {{{user.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="#">Followers {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">likes {{{user.Likes.length}}}</a></li>
           </ul>
           <!--button-->
-          <div class="">
-            <button class="btn btn-outline-primary">Edit</button>
+          <div>
+            {{#if isCurrentUser}}
+              <button class="btn btn-outline-primary">Edit</button>
+            {{else}}
+              {{#if isFollowed}}
+                <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger">Unfollow</button>
+                </form>
+              {{else}}
+                <form action="/followships" method="POST">
+                  <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+                  <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+              {{/if}}
+            {{/if}}
           </div>
         </div>
       </div>
@@ -35,17 +49,21 @@
                   </div>
                   <div class="col">
                     <div class="card-block">
-                      <a href="#">
+                      <a href="/users/{{{this.id}}}/tweets">
                         <span class="pt-2">{{{this.name}}}</span>
                       </a>
                       <p>{{{this.introduction}}}</p>
                       <!--button-->
-                      <form action="/users/:id?_method=DELETE/followings" method="POST" style="display: inline;">
-                        <button type="submit" class="btn btn-danger mb-2">Unfollow</button>
-                      </form>
-                      <form action="/users/:id/followings" method="POST" style="display: inline;">
-                        <button type="submit" class="btn btn-primary mb-2">Follow</button>
-                      </form>
+                      {{#if this.followerHaveCurrentUser}}
+                        <form action="/followships/{{{this.id}}}?_method=DELETE" method="POST" style="display: inline;">
+                          <button type="submit" class="btn btn-danger mb-2">Unfollow</button>
+                        </form>
+                      {{else}}
+                        <form action="/followships" method="POST">
+                          <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                          <button type="submit" class="btn btn-primary mb-2">Follow</button>
+                        </form>
+                      {{/if}}
                       <!--end of button-->
                     </div>
                   </div>

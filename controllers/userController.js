@@ -164,19 +164,41 @@ let userController = {
       }
       const isCurrentUser = +req.user.id === +req.params.id ? true : false
       const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
-      res.render('user/followings', { user, isCurrentUser })
+      res.render('user/followings', { user, isCurrentUser, isFollowed })
     })
   },
 
   getUserFollowers: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
+        Like,
         { model: Tweet, include: [Reply] },
-        { model: User, as: 'Followers' },
+        {
+          model: User,
+          as: 'Followers',
+          include: {
+            model: User,
+            as: 'Followers'
+          }
+        },
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      res.render('user/followers', { user })
+      /*
+      1. 遍歷 user.Follower 找到該 user 的追蹤者
+      2. 遍歷 該 user 追蹤者中的追隨者
+      3. 如果追隨者中包含 user 就傳入 followerHaveCurrentUser 為 true
+    */
+      for (let i = 0; i < user.Followers.length; i++) {
+        for (let j = 0; j < user.Followers[i].Followers.length; j++) {
+          if (+user.Followers[i].Followers[j].id === +req.user.id) {
+            user.Followers[i].followerHaveCurrentUser = true
+          }
+        }
+      }
+      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      res.render('user/followers', { user, isCurrentUser, isFollowed })
     })
   },
 
