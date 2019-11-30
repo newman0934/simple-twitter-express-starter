@@ -2,11 +2,17 @@ const db = require('../models')
 const Tweet = db.Tweet
 const Reply = db.Reply
 const User = db.User
+const Like = db.Like
 const helpers = require('../_helpers')
 
 const tweetController = {
   getTweets: (req, res) => {
-    return Tweet.findAll({ include: [Reply, User] }).then(tweets => {
+    return Tweet.findAll({ include: [Reply, User, Like] }).then(tweets => {
+      tweets.map(tweet => {
+        tweet.Likes.map(like => {
+          if (+like.UserId === +req.user.id) return (tweet.likedByUser = true)
+        })
+      })
       return res.render('tweets', { tweets })
     })
   },

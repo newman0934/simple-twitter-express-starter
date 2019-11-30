@@ -4,6 +4,7 @@ const User = db.User
 const Tweet = db.Tweet
 const Reply = db.Reply
 const Followship = db.Followship
+const Like = db.Like
 const { Op } = (sequelize = require('sequelize'))
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -186,6 +187,26 @@ let userController = {
         followingId: req.params.followingId
       }
     }).then(() => {
+      return res.redirect('back')
+    })
+  },
+
+  addLike: (req, res) => {
+    return Like.create({
+      UserId: req.user.id,
+      TweetId: req.params.id
+    }).then(like => {
+      return res.redirect('back')
+    })
+  },
+
+  removeLike: (req, res) => {
+    return Like.destroy({
+      where: {
+        UserId: req.user.id,
+        TweetId: req.params.id
+      }
+    }).then(like => {
       return res.redirect('back')
     })
   }

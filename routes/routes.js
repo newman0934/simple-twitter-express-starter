@@ -62,14 +62,15 @@ router.delete(
 router.get('/users/:id/likes', authenticated, (req, res) =>
   res.render('user/like')
 )
-router.post('/tweets/:id/like', authenticated, (req, res) =>
-  res.send('post /tweets/:id/like')
-)
-router.post('/tweets', authenticated, (req, res) =>
-  res.send('post /tweets/:id/unlike')
-)
+router.post('/tweets/:id/like', authenticated, userController.addLike)
+router.post('/tweets/:id/unlike', authenticated, userController.removeLike)
 router.get('/users/:id/edit', authenticated, userController.getUserEdit)
-router.post('/users/:id', authenticated, upload.single('avatar'), userController.postUser)
+router.post(
+  '/users/:id',
+  authenticated,
+  upload.single('avatar'),
+  userController.postUser
+)
 
 router.get('/admin/tweets', authenticatedAdmin, adminController.getTweets)
 router.delete(
