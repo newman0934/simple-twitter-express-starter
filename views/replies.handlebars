@@ -16,7 +16,8 @@
                 {{{tweetUser.Followings.length}}}</a></li>
             <li class="list-group-item"><a href="/users/{{{tweetUser.id}}}/followers">Followers
                 {{{tweetUser.Followers.length}}}</a></li>
-            <li class="list-group-item">likes</li>
+            <li class="list-group-item"><a href="/users/{{{tweetUser.id}}}/likes">likes {{{tweetUser.Likes.length}}}</a>
+            </li>
           </ul>
           {{!-- button --}}
           <div class="mb-4">
@@ -43,7 +44,7 @@
         <div class="card my-1">
           <div class="row">
             <div class="col-auto">
-              <img class="img-responsive center-block" src="https://fakeimg.pl/150x150/">
+              <img class="img-responsive center-block" src="{{{tweetUser.avatar}}}" style="width:150px; height: 150px;">
             </div>
             <div class="col">
               <div class="card-block px-2">
@@ -52,7 +53,19 @@
                 </a>
                 <p>{{{tweet.description}}}</p>
                 <a href='#' class="mr-3">Reply({{{replies.length}}})</a>
-                <a href='#' class="">Like(0)</a>
+                {{!-- Like button start --}}
+                {{#if likedByUser}}
+                  <form action="/tweets/{{{tweet.id}}}/unlike" method="POST" class="d-inline ">
+                    <input type="number" name="id" value="{{{tweet.id}}}" class="d-none">
+                    <button type="submit" class="btn text-danger btn-link p-0">Unlike({{{tweet.Likes.length}}})</button>
+                  </form>
+                {{else}}
+                  <form action="/tweets/{{{tweet.id}}}/like" method="POST" class="d-inline ">
+                    <input type="number" name="id" value="{{{tweet.id}}}" class="d-none">
+                    <button type="submit" class="btn btn-link p-0">Like({{{tweet.Likes.length}}})</button>
+                  </form>
+                {{/if}}
+                {{!-- Like button end --}}
               </div>
             </div>
           </div>
@@ -68,7 +81,7 @@
               </div>
               <div class="col">
                 <div class="card-block px-2">
-                  <a href="#">
+                  <a href="/users/{{{this.User.id}}}/tweets">
                     <span class="pt-2">{{{this.User.name}}}</span>
                   </a>
                   <p>{{{this.comment}}}</p>
