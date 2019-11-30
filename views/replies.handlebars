@@ -10,9 +10,12 @@
           <p class="mb-2">{{{tweetUser.introduction}}}
           </p>
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets {{{tweetUser.Tweets.length}}}</li>
-            <li class="list-group-item">Followings {{{tweetUser.Followings.length}}}</li>
-            <li class="list-group-item">Followers {{{tweetUser.Followers.length}}}</li>
+            <li class="list-group-item"><a href="/users/{{{tweetUser.id}}}/tweets">Tweets
+                {{{tweetUser.Tweets.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{tweetUser.id}}}/followings">Followings
+                {{{tweetUser.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{tweetUser.id}}}/followers">Followers
+                {{{tweetUser.Followers.length}}}</a></li>
             <li class="list-group-item">likes</li>
           </ul>
           {{!-- button --}}
