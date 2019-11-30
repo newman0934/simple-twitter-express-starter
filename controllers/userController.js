@@ -140,6 +140,7 @@ let userController = {
   getUserFollowings: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
+        Like,
         { model: Tweet, include: [Reply] },
         { model: User, as: 'Followers' },
         {

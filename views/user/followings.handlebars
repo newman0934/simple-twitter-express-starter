@@ -11,10 +11,12 @@
           <p class="mb-2">{{{user.introduction}}}
           </p>
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
-            <li class="list-group-item">Followings {{{user.Followings.length}}}</li>
-            <li class="list-group-item">Followers {{{user.Followers.length}}}</li>
-            <li class="list-group-item">likes</li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/tweets">Tweets {{{user.Tweets.length}}}</a></li>
+            <li class="list-group-item"><a href="#">Followings
+                {{{user.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followers">Followers
+                {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">likes {{{user.Likes.length}}}</a></li>
           </ul>
           <!--button-->
           <div class="">
