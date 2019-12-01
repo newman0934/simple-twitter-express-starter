@@ -222,6 +222,26 @@ let userController = {
     })
   },
 
+  getUserLike: (req, res) => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, as: 'LikeTweets', include: [User, Reply, Like] },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
+      ]
+    }).then(user => {
+      const likeTweets = user.dataValues.LikeTweets
+      likeTweets.map(tweet => {
+        tweet.Likes.map(like => {
+          if (like.UserId === req.user.id) return (tweet.likedByUser = true)
+        })
+      })
+      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      res.render('user/like', { user, likeTweets, isCurrentUser, isFollowed })
+    })
+  },
+
   addLike: (req, res) => {
     return Like.create({
       UserId: req.user.id,
