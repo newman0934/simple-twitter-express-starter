@@ -26,7 +26,10 @@ const tweetController = {
       }
     )
     // 取得 /tweets 左半邊資料並渲染
-    return Tweet.findAll({ include: [Reply, User, Like] }).then(tweets => {
+    return Tweet.findAll({
+      include: [Reply, User, Like],
+      order: [['createdAt', 'DESC']]
+    }).then(tweets => {
       tweets.map(tweet => {
         tweet.Likes.map(like => {
           if (+like.UserId === +req.user.id) return (tweet.likedByUser = true)
