@@ -4,7 +4,8 @@ const User = db.User
 
 const adminController = {
   getTweets: (req, res) => {
-    return Tweet.findAll().then(tweets => {
+    return Tweet.findAll({include: [User]}).then(tweets => {
+      console.log(tweets)
       return res.render('admin/tweets', { tweets })
     })
   },
@@ -12,7 +13,6 @@ const adminController = {
   deleteTweet: (req, res) => {
     return Tweet.findByPk(req.params.id).then(tweet => {
       tweet.destroy().then(tweet => {
-        console.log(`tweet id:${req.params.id} is successfully deleted`)
         res.redirect('/admin/tweets')
       })
     })
