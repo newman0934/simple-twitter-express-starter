@@ -228,8 +228,12 @@ let userController = {
         { model: Tweet, as: 'LikeTweets', include: [User, Reply, Like] },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' }
+      ],
+      order: [
+        [{ model: Tweet, as: 'LikeTweets' }, 'createdAt', 'DESC']
       ]
     }).then(user => {
+      // console.log(user)
       const likeTweets = user.dataValues.LikeTweets
       likeTweets.map(tweet => {
         tweet.Likes.map(like => {

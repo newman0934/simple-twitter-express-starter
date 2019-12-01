@@ -52,7 +52,9 @@
             <div class="col">
               <div class="card-block px-2">
                 <a href="#">
-                  <span class="pt-2" href="/users/{{{this.User.id}}}/tweets">@{{{this.User.name}}}</span>
+                  <span class="pt-2" href="/users/{{{this.User.id}}}/tweets">
+                    @{{{this.User.name}}}, {{{moment this.createdAt}}}
+                  </span>
                 </a>
                 <p>{{{this.description}}}</p>
                 {{!-- Reply button start --}}
