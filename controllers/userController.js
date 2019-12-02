@@ -154,8 +154,7 @@ let userController = {
           as: 'Followings',
           include: { model: User, as: 'Followers' }
         }
-      ],
-      order: [[{ model: User, as: 'Followings' }, 'createdAt', 'DESC']]
+      ]
     }).then(user => {
       /* 
         1. 遍歷 user.Following 找到該 user 的追蹤者
@@ -176,6 +175,7 @@ let userController = {
       const isFollowed = user.Followers.map(d => d.id).includes(
         _helpers.getUser(req).id
       )
+      user.Followings.sort((a, b) => b.createdAt - a.createdAt)
       res.render('user/followings', { user, isCurrentUser, isFollowed })
     })
   },
@@ -214,6 +214,7 @@ let userController = {
       const isFollowed = user.Followers.map(d => d.id).includes(
         _helpers.getUser(req).id
       )
+      user.Followers.sort((a, b) => b.createdAt - a.createdAt)
       res.render('user/followers', { user, isCurrentUser, isFollowed })
     })
   },
