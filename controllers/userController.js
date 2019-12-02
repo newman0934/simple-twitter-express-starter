@@ -206,10 +206,11 @@ let userController = {
   },
 
   addFollowing: (req, res) => {
+    if (_helpers.getUser(req).id === +req.body.id) return res.redirect('back')
     return Followship.create({
-      followerId: req.user.id,
-      followingId: req.body.id
-    }).then(followship => {
+      followerId: _helpers.getUser(req).id,
+      followingId: +req.body.id
+    }).then(() => {
       return res.redirect('back')
     })
   },
@@ -217,8 +218,8 @@ let userController = {
   removeFollowing: (req, res) => {
     return Followship.destroy({
       where: {
-        followerId: req.user.id,
-        followingId: req.params.followingId
+        followerId: _helpers.getUser(req).id,
+        followingId: +req.params.followingId
       }
     }).then(() => {
       return res.redirect('back')
