@@ -148,7 +148,8 @@ let userController = {
           as: 'Followings',
           include: { model: User, as: 'Followers' }
         }
-      ]
+      ],
+      order: [[{ model: User, as: 'Followings' }, 'createdAt', 'DESC']]
     }).then(user => {
       /* 
         1. 遍歷 user.Following 找到該 user 的追蹤者
@@ -182,7 +183,8 @@ let userController = {
           }
         },
         { model: User, as: 'Followings' }
-      ]
+      ],
+      order: [[{ model: User, as: 'Followers' }, 'createdAt', 'DESC']]
     }).then(user => {
       /*
       1. 遍歷 user.Follower 找到該 user 的追蹤者
@@ -229,9 +231,7 @@ let userController = {
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' }
       ],
-      order: [
-        [{ model: Tweet, as: 'LikeTweets' }, 'createdAt', 'DESC']
-      ]
+      order: [[{ model: Tweet, as: 'LikeTweets' }, 'createdAt', 'DESC']]
     }).then(user => {
       // console.log(user)
       const likeTweets = user.dataValues.LikeTweets
