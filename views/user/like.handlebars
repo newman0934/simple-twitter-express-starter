@@ -15,23 +15,25 @@
             <li class="list-group-item"><a href="/users/{{{user.id}}}/tweets">Tweets {{{user.Tweets.length}}}</a></li>
             <li class="list-group-item"><a href="/users/{{{user.id}}}/followings">Followings
                 {{{user.Followings.length}}}</a></li>
-            <li class="list-group-item"><a href="#">Followers {{{user.Followers.length}}}</a></li>
-            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">likes {{{likeTweets.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followers">Followers
+                {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item list-group-item-action active">likes
+              {{{likeTweets.length}}}</li>
           </ul>
 
           <!--button-->
           <div>
             {{#if isCurrentUser}}
-            <button class="btn btn-outline-primary">Edit Profile</button>
+            <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>`
             {{else}}
             {{#if isFollowed}}
             <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
-              <button type="submit" class="btn btn-danger">Unfollow</button>
+              <button type="submit" class="btn btn-danger badge-pill">Following</button>
             </form>
             {{else}}
             <form action="/followships" method="POST">
               <input type="number" name="id" value="{{{user.id}}}" class="d-none">
-              <button type="submit" class="btn btn-primary">Follow</button>
+              <button type="submit" class="btn btn-primary badge-pill">Follow</button>
             </form>
             {{/if}}
             {{/if}}
@@ -43,6 +45,7 @@
         <h1 class="p-2">Like</h1>
 
         <!--tweets card-->
+        {{#if likeTweets}}
         {{#each likeTweets}}
         <div class="card mb-3">
           <div class="row">
@@ -58,20 +61,27 @@
                 </a>
                 <p>{{{this.description}}}</p>
                 {{!-- Reply button start --}}
-                <a href='/tweets/{{{this.id}}}/replies' class="mr-3">
-                  Reply({{{this.Replies.length}}})
+                <a href='/tweets/{{{this.id}}}/replies' class="mr-3 mt-3">
+                  <i class="fas fa-comment-dots"></i>
+                  {{{this.Replies.length}}}
                 </a>
                 {{!-- Reply button end --}}
                 {{!-- Like button start --}}
                 {{#if this.likedByUser}}
                 <form action="/tweets/{{{this.id}}}/unlike" method="POST" class="d-inline ">
                   <input type="number" name="id" value="{{{this.id}}}" class="d-none">
-                  <button type="submit" class="btn text-danger btn-link p-0">Unlike({{{this.Likes.length}}})</button>
+                  <button type="submit" class="btn text-danger btn-link p-0 mb-1">
+                    <i class="fas fa-heart"></i>
+                    {{{this.Likes.length}}}
+                  </button>
                 </form>
                 {{else}}
                 <form action="/tweets/{{{this.id}}}/like" method="POST" class="d-inline ">
                   <input type="number" name="id" value="{{{this.id}}}" class="d-none">
-                  <button type="submit" class="btn btn-link p-0">Like({{{this.Likes.length}}})</button>
+                  <button type="submit" class="btn btn-link p-0 mb-1">
+                    <i class="far fa-heart"></i>
+                    {{{this.Likes.length}}}
+                  </button>
                 </form>
                 {{/if}}
                 {{!-- Like button end --}}
@@ -81,6 +91,9 @@
           </div>
         </div>
         {{/each}}
+        {{else}}
+        <h4 class="ml-5 p-2">Don’t have any likes yet</h4>
+        {{/if}}
         <!--end of card-->
 
 

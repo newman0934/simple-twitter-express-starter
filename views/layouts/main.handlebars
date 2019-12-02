@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Simple Twitter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
@@ -23,8 +24,10 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
-    <a class="navbar-brand" href="/">Simple Twitter</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
+    <a class="navbar-brand" href="/">
+      <i class="fab fa-twitter"></i>
+      Simple Twitter</a>
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
       </ul>
@@ -33,16 +36,17 @@
         <a href="/admin" style="color: white;margin-right: 10px;">Admin 後台</a>
         {{/ifCond}}
         {{#if userAuth}}
-        <span style="color: white;margin-right: 10px;">Hi, {{userAuth.email}}</span>
-        <a href="/users/{{userAuth.id}}/tweets" style="color: white;margin-right: 10px;">Profile</a>
-        <a href="/logout">
-          <button class="btn btn-outline-success my-2 my-sm-0">LogOut</button>
+        <span style="color: white;margin-right: 10px;">Hi, {{userAuth.name}}</span>
+        <a href="/users/{{userAuth.id}}/tweets" style="color: white;margin-right: 10px;">
+          <img src="{{userAuth.avatar}}" alt="avatar" class="rounded-circle" style="width: 60px; height: 60px;">
+        </a>
+        <a href="/logout"> <button class="btn btn-outline-warning my-2 my-sm-0">LogOut</button>
         </a>
         {{/if}}
       </div>
     </div>
   </nav>
-  <br />
+
   <main role="main">
     <div class="album py-5 bg-light">
       <div class="container">
