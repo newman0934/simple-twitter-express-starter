@@ -59,9 +59,7 @@ router.delete(
   authenticated,
   userController.removeFollowing
 )
-router.get('/users/:id/likes', authenticated, (req, res) =>
-  res.render('user/like')
-)
+router.get('/users/:id/likes', authenticated, userController.getUserLike)
 router.post('/tweets/:id/like', authenticated, userController.addLike)
 router.post('/tweets/:id/unlike', authenticated, userController.removeLike)
 router.get('/users/:id/edit', authenticated, userController.getUserEdit)

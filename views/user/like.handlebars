@@ -5,24 +5,36 @@
         <!--user profile-->
         <div class="text-center">
           <div class="mb-2">
-            <img src="https://picsum.photos/id/237/200/300" alt="avatar" style="height:300px;width:300px">
-            <h1 class="mb-2">User name</h1>
+            <img src="{{{user.avatar}}}" alt="avatar" style="height:300px;width:300px">
+            <h1 class="mb-2">{{{user.name}}}</h1>
           </div>
-          <p class="mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores placeat ducimus non,
-            soluta cum unde eum ea quia. Eum voluptatibus ipsam quo similique labore facilis, perferendis esse magni
-            tenetur odit!
+          <p class="mb-2">{{{user.introduction}}}
           </p>
 
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets</li>
-            <li class="list-group-item">Followings</li>
-            <li class="list-group-item">Followers</li>
-            <li class="list-group-item">likes</li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/tweets">Tweets {{{user.Tweets.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followings">Followings
+                {{{user.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="#">Followers {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">likes {{{likeTweets.length}}}</a></li>
           </ul>
 
           <!--button-->
-          <div class="">
-            <button class="btn btn-outline-primary">Edit</button>
+          <div>
+            {{#if isCurrentUser}}
+            <button class="btn btn-outline-primary">Edit Profile</button>
+            {{else}}
+            {{#if isFollowed}}
+            <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger">Unfollow</button>
+            </form>
+            {{else}}
+            <form action="/followships" method="POST">
+              <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+              <button type="submit" class="btn btn-primary">Follow</button>
+            </form>
+            {{/if}}
+            {{/if}}
           </div>
 
         </div>
@@ -31,28 +43,44 @@
         <h1 class="p-2">Like</h1>
 
         <!--tweets card-->
+        {{#each likeTweets}}
         <div class="card mb-3">
           <div class="row">
             <div class="col-auto">
-              <img class="img-responsive center-block" src="https://picsum.photos/id/237/200/300"
-                style="height:150px;width:150px">
+              <img class="img-responsive center-block" src="{{{this.User.avatar}}}" style="height:150px;width:150px">
             </div>
             <div class="col">
               <div class="card-block px-2">
                 <a href="#">
-                  <span class="pt-2">@username</span>
+                  <span class="pt-2" href="/users/{{{this.User.id}}}/tweets">
+                    @{{{this.User.name}}}, {{{moment this.createdAt}}}
+                  </span>
                 </a>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos quo veritatis beatae provident ab
-                  deleniti quia voluptatum saepe eaque corrupti. Quasi temporibus adipisci soluta, qui itaque blanditiis
-                  eveniet repellat doloribus.</p>
-
-                <a href='#' class="mr-3">Reply(0)</a>
-                <a href='#' class="">Like(0)</a>
+                <p>{{{this.description}}}</p>
+                {{!-- Reply button start --}}
+                <a href='/tweets/{{{this.id}}}/replies' class="mr-3">
+                  Reply({{{this.Replies.length}}})
+                </a>
+                {{!-- Reply button end --}}
+                {{!-- Like button start --}}
+                {{#if this.likedByUser}}
+                <form action="/tweets/{{{this.id}}}/unlike" method="POST" class="d-inline ">
+                  <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                  <button type="submit" class="btn text-danger btn-link p-0">Unlike({{{this.Likes.length}}})</button>
+                </form>
+                {{else}}
+                <form action="/tweets/{{{this.id}}}/like" method="POST" class="d-inline ">
+                  <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                  <button type="submit" class="btn btn-link p-0">Like({{{this.Likes.length}}})</button>
+                </form>
+                {{/if}}
+                {{!-- Like button end --}}
               </div>
             </div>
             <hr>
           </div>
         </div>
+        {{/each}}
         <!--end of card-->
 
 
