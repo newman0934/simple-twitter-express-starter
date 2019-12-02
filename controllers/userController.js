@@ -71,12 +71,16 @@ let userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
       const tweets = user.Tweets
-      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
       tweets.map(tweet => {
         tweet.Likes.map(like => {
-          if (like.UserId === req.user.id) return (tweet.likedByUser = true)
+          if (like.UserId === _helpers.getUser(req).id)
+            return (tweet.likedByUser = true)
         })
       })
       res.render('user/user', {
@@ -89,14 +93,15 @@ let userController = {
   },
 
   getUserEdit: (req, res) => {
+    if (_helpers.getUser(req).id !== +req.params.id) return res.redirect('/')
     return User.findByPk(req.params.id).then(user => {
-      res.render('user/edit', { user })
+      res.render(`user/edit`, { user })
     })
   },
 
   //編輯使用者資料
   postUser: (req, res) => {
-    if (Number(req.params.id) !== Number(req.user.id)) {
+    if (Number(req.params.id) !== Number(_helpers.getUser(req).id)) {
       return res.redirect('back')
     }
 
@@ -159,13 +164,18 @@ let userController = {
       */
       for (let i = 0; i < user.Followings.length; i++) {
         for (let j = 0; j < user.Followings[i].Followers.length; j++) {
-          if (+user.Followings[i].Followers[j].id === req.user.id) {
+          if (
+            +user.Followings[i].Followers[j].id === _helpers.getUser(req).id
+          ) {
             user.Followings[i].followerHaveCurrentUser = true
           }
         }
       }
-      const isCurrentUser = +req.user.id === +req.params.id ? true : false
-      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
       res.render('user/followings', { user, isCurrentUser, isFollowed })
     })
   },
@@ -194,13 +204,16 @@ let userController = {
     */
       for (let i = 0; i < user.Followers.length; i++) {
         for (let j = 0; j < user.Followers[i].Followers.length; j++) {
-          if (+user.Followers[i].Followers[j].id === +req.user.id) {
+          if (+user.Followers[i].Followers[j].id === _helpers.getUser(req).id) {
             user.Followers[i].followerHaveCurrentUser = true
           }
         }
       }
-      const isCurrentUser = +req.user.id === +req.params.id ? true : false
-      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
       res.render('user/followers', { user, isCurrentUser, isFollowed })
     })
   },
@@ -239,11 +252,15 @@ let userController = {
       const likeTweets = user.dataValues.LikeTweets
       likeTweets.map(tweet => {
         tweet.Likes.map(like => {
-          if (like.UserId === req.user.id) return (tweet.likedByUser = true)
+          if (like.UserId === _helpers.getUser(req).id)
+            return (tweet.likedByUser = true)
         })
       })
-      const isCurrentUser = +req.user.id === +req.params.id ? true : false
-      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
       res.render('user/like', { user, likeTweets, isCurrentUser, isFollowed })
     })
   },

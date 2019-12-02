@@ -4,6 +4,8 @@ const User = db.User
 const Reply = db.Reply
 const Like = db.Like
 
+const _helpers = require('../_helpers')
+
 const replyController = {
   getTweetReply: (req, res) => {
     return Tweet.findByPk(req.params.tweet_id, {
@@ -23,7 +25,7 @@ const replyController = {
     }).then(tweet => {
       const replies = tweet.Replies
       const tweetUser = tweet.User
-      const currentUser = req.user
+      const currentUser = _helpers.getUser(req)
       const isFollowed = tweetUser.Followers.map(d => d.id).includes(
         currentUser.id
       )
@@ -47,9 +49,9 @@ const replyController = {
       return res.redirect('back')
     }
     return Reply.create({
-      comment: req.body.comment,
-      UserId: req.user.id,
-      TweetId: req.params.tweet_id
+      UserId: _helpers.getUser(req).id,
+      TweetId: req.params.tweet_id,
+      comment: req.body.comment
     }).then(reply => {
       res.redirect('back')
     })
