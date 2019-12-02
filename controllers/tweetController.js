@@ -39,6 +39,10 @@ const tweetController = {
     })
   },
   postTweets: (req, res) => {
+    if (req.body.description.length > 140) {
+      req.flash('error_messages', 'input description over limit')
+      return res.redirect('/tweets')
+    }
     if (!req.body.description) {
       req.flash('error_messages', 'must input description')
       return res.redirect('/tweets')
