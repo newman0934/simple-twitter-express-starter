@@ -64,7 +64,7 @@ router.post('/tweets/:id/like', authenticated, userController.addLike)
 router.post('/tweets/:id/unlike', authenticated, userController.removeLike)
 router.get('/users/:id/edit', authenticated, userController.getUserEdit)
 router.post(
-  '/users/:id',
+  '/users/:id/edit',
   authenticated,
   upload.single('avatar'),
   userController.postUser
