@@ -21,18 +21,18 @@
           <!--button-->
           <div>
             {{#if isCurrentUser}}
-              <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
+            <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
             {{else}}
-              {{#if isFollowed}}
-                <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
-                  <button type="submit" class="btn btn-danger badge-pill">Following</button>
-                </form>
-              {{else}}
-                <form action="/followships" method="POST">
-                  <input type="number" name="id" value="{{{user.id}}}" class="d-none">
-                  <button type="submit" class="btn btn-primary badge-pill">Follow</button>
-                </form>
-              {{/if}}
+            {{#if isFollowed}}
+            <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger badge-pill">Following</button>
+            </form>
+            {{else}}
+            <form action="/followships" method="POST">
+              <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+              <button type="submit" class="btn btn-primary badge-pill">Follow</button>
+            </form>
+            {{/if}}
             {{/if}}
           </div>
         </div>
@@ -42,41 +42,42 @@
         <div class="row">
           <!--followings card-->
           {{#if user.Followings}}
-            {{#each user.Followings}}
-              <div class="col-md-6 p-2">
-                <div class="card shadow-sm">
-                  <div class="row">
-                    <div class="col-auto">
-                      <img class="img-responsive center-block" src="{{{this.avatar}}}" style="height:150px;width:150px">
-                    </div>
-                    <div class="col">
-                      <div class="card-block">
-                        <a href="/users/{{{this.id}}}/tweets">
-                          <span class="pt-2">{{{this.name}}}</span>
-                        </a>
-                        <p>{{{this.introduction}}}</p>
-                        <!--button-->
-                        {{#if this.followerHaveCurrentUser}}
-                          <form action="/followships/{{{this.id}}}?_method=DELETE" method="POST"
-                            style="display: inline;">
-                            <button type="submit" class="btn btn-danger badge-pill mb-2">Following</button>
-                          </form>
-                        {{else}}
-                          <form action="/followships" method="POST">
-                            <input type="number" name="id" value="{{{this.id}}}" class="d-none">
-                            <button type="submit" class="btn btn-primary badge-pill mb-2">Follow</button>
-                          </form>
-                        {{/if}}
-                        <!--end of button-->
-                      </div>
-                    </div>
-                    <hr>
+          {{#each user.Followings}}
+          <div class="col-md-6 p-2">
+            <div class="card shadow-sm">
+              <div class="row">
+                <div class="col-auto">
+                  <img class="img-responsive center-block" src="{{{this.avatar}}}" style="height:150px;width:150px">
+                </div>
+                <div class="col">
+                  <div class="card-block">
+                    <a href="/users/{{{this.id}}}/tweets">
+                      <span class="pt-2">{{{this.name}}}</span>
+                    </a>
+                    <p>{{{this.introduction}}}</p>
+                    <!--button-->
+                    {{#if isNotCurrentUser}}
+                    {{#if this.followerHaveCurrentUser}}
+                    <form action="/followships/{{{this.id}}}?_method=DELETE" method="POST" style="display: inline;">
+                      <button type="submit" class="btn btn-danger badge-pill mb-2">Following</button>
+                    </form>
+                    {{else}}
+                    <form action="/followships" method="POST">
+                      <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                      <button type="submit" class="btn btn-primary badge-pill mb-2">Follow</button>
+                    </form>
+                    {{/if}}
+                    {{/if}}
+                    <!--end of button-->
                   </div>
                 </div>
+                <hr>
               </div>
-            {{/each}}
+            </div>
+          </div>
+          {{/each}}
           {{else}}
-            <h4 class="ml-5 p-2">Don’t have any followings yet</h4>
+          <h4 class="ml-5 p-2">Don’t have any followings yet</h4>
           {{/if}}
           <!--end of card-->
         </div>
