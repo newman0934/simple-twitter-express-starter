@@ -18,7 +18,10 @@
             <th>name</th>
             <th>Email</th>
             <th>role</th>
-            <th>introduction</th>
+            <th>tweets</th>
+            <th>likes</th>
+            <th>Followers</th>
+            <th>Followings</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +32,10 @@
             <td>{{this.name}}</td>
             <td>{{this.email}}</td>
             <td>{{this.role}}</td>
-            <td>{{this.introduction}}</td>
+            <td>{{this.Tweets.length}}</td>
+            <td>{{this.Likes.length}}</td>
+            <td>{{this.Followers.length}}</td>
+            <td>{{this.Followings.length}}</td>
         </tr>
         {{/each}}
     </tbody>

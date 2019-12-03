@@ -15,8 +15,7 @@
       <th scope="col">id</th>
       <th scope="col">description</th>
       <th scope="col">user name</th>
-      <th scope="col">user email</th>
-      <th scope="col">created date</th>
+      <th scope="col">replies</th>
       <th scope="col">delete</th>
     </tr>
   </thead>
@@ -26,8 +25,9 @@
       <th scope="row">{{this.id}}</th>
       <td>{{this.description}}</td>
       <td>{{this.User.name}}</td>
-      <td>{{this.User.email}}</td>
-      <td>{{this.createdAt}}</td>
+      <td><a href="#" data-toggle="modal" data-target="#replies-{{this.id}}">
+  {{this.Replies.length}}
+</a></td>
       <td>
         <form action="/admin/tweets/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
           <button type="submit" class="btn btn-link">Delete</button>
@@ -37,3 +37,42 @@
     {{/each}}
   </tbody>
 </table>
+
+{{#each tweets}}
+<div class="modal fade" id="replies-{{this.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Replies</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">name</th>
+              <th scope="col">comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.Replies}}
+            <tr>
+              <td>{{this.id}}</td>
+              <td>{{../this.User.name}}</td>
+              <td>{{replyCut this.comment}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}

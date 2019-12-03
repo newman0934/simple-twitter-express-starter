@@ -6,4 +6,7 @@ module.exports = {
             return options.inverse(this)
         }
     },
+    replyCut: function(a){
+        return a.substring(0, 50)
+    }
 }
