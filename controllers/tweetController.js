@@ -23,6 +23,11 @@ const tweetController = {
           }
         }
         sortedUserList = users.slice(0, 10)
+        // 如果 user 不是登入者加入 isNotCurrentUser 給 view 判定 follow 按鈕
+        sortedUserList.map(user => {
+          user.isNotCurrentUser =
+            user.id !== helpers.getUser(req).id ? true : false
+        })
       }
     )
     // 取得 /tweets 左半邊資料並渲染

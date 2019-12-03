@@ -44,8 +44,8 @@ const replyController = {
   },
 
   postTweetReply: (req, res) => {
-    if (!req.body.comment) {
-      console.error('must input comment')
+    if (req.body.comment === '') {
+      req.flash('error_messages', 'must input reply')
       return res.redirect('back')
     }
     return Reply.create({
