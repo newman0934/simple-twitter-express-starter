@@ -55,6 +55,7 @@
                     </a>
                     <p>{{{this.introduction}}}</p>
                     <!--button-->
+                    {{#if isNotCurrentUser}}
                     {{#if this.followerHaveCurrentUser}}
                     <form action="/followships/{{{this.id}}}?_method=DELETE" method="POST" style="display: inline;">
                       <button type="submit" class="btn btn-danger mb-2 badge-pill">Following</button>
@@ -64,6 +65,7 @@
                       <input type="number" name="id" value="{{{this.id}}}" class="d-none">
                       <button type="submit" class="btn btn-primary mb-2 badge-pill">Follow</button>
                     </form>
+                    {{/if}}
                     {{/if}}
                     <!--end of button-->
                   </div>

@@ -5,10 +5,11 @@
       <div class="col-md-2">
         <!--upload avatar-->
         <div class="mb-2">
-          <img src="{{user.avatar}}" alt="avatar" style="height:150px;width:150px">
+          <img id="preview-avatar" src="{{user.avatar}}" alt="avatar" style="height:150px;width:150px">
           <label for="avatar" class="btn btn-primary btn-block mt-2">Browse files...</label>
           {{!-- input tag is actually hided (see css) --}}
-          <input type="file" id="avatar" class="form-control-file" name="avatar">
+          <input type="file" id="avatar" class="form-control-file" name="avatar"
+            accept="image/gif, image/jpeg, image/png" />
         </div>
 
       </div>
@@ -22,3 +23,24 @@
     </form>
   </div>
 </section>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+  $(document).ready(function () {
+    let readURL = function (input) {
+      console.log(input.files)
+      if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          $("#preview-avatar").attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $("#avatar").change(function () {
+      readURL(this);
+    });
+  })
+
+</script>

@@ -68,7 +68,8 @@ let userController = {
         { model: Tweet, include: [Reply, Like] },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
-      ]
+      ],
+      order: [[Tweet, 'createdAt', 'DESC']]
     }).then(user => {
       const isFollowed = user.Followers.map(d => d.id).includes(
         _helpers.getUser(req).id
@@ -175,6 +176,11 @@ let userController = {
         _helpers.getUser(req).id
       )
       user.Followings.sort((a, b) => b.createdAt - a.createdAt)
+      // 如果 user 不是登入者加入 isNotCurrentUser 給 view 判定 follow 按鈕
+      user.Followings.map(user => {
+        user.isNotCurrentUser =
+          user.id !== _helpers.getUser(req).id ? true : false
+      })
       res.render('user/followings', { user, isCurrentUser, isFollowed })
     })
   },
@@ -214,6 +220,11 @@ let userController = {
         _helpers.getUser(req).id
       )
       user.Followers.sort((a, b) => b.createdAt - a.createdAt)
+      // 如果 user 不是登入者加入 isNotCurrentUser 給 view 判定 follow 按鈕
+      user.Followers.map(user => {
+        user.isNotCurrentUser =
+          user.id !== _helpers.getUser(req).id ? true : false
+      })
       res.render('user/followers', { user, isCurrentUser, isFollowed })
     })
   },
