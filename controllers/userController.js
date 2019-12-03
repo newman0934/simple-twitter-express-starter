@@ -4,9 +4,11 @@ const User = db.User
 const Tweet = db.Tweet
 const Reply = db.Reply
 const Followship = db.Followship
+const Like = db.Like
 const { Op } = (sequelize = require('sequelize'))
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const _helpers = require('../_helpers')
 
 let userController = {
   signInPage: (req, res) => {
@@ -56,21 +58,30 @@ let userController = {
   },
   logout: (req, res) => {
     req.flash('success_messages', '登出成功')
-    req.session.destroy()
     req.logout()
     res.redirect('/signin')
   },
   getUserTweets: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
-        { model: Tweet, include: [Reply] },
+        Like,
+        { model: Tweet, include: [Reply, Like] },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      const isFollowed = user.Followers.map(d => d.id).includes(req.user.id)
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
       const tweets = user.Tweets
-      const isCurrentUser = +req.user.id === +req.params.id ? true : false
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      tweets.map(tweet => {
+        tweet.Likes.map(like => {
+          if (like.UserId === _helpers.getUser(req).id)
+            return (tweet.likedByUser = true)
+        })
+      })
       res.render('user/user', {
         user,
         tweets,
@@ -81,14 +92,15 @@ let userController = {
   },
 
   getUserEdit: (req, res) => {
+    if (_helpers.getUser(req).id !== +req.params.id) return res.redirect('/')
     return User.findByPk(req.params.id).then(user => {
-      res.render('user/edit', { user })
+      res.render(`user/edit`, { user })
     })
   },
 
   //編輯使用者資料
   postUser: (req, res) => {
-    if (Number(req.params.id) !== Number(req.user.id)) {
+    if (Number(req.params.id) !== Number(_helpers.getUser(req).id)) {
       return res.redirect('back')
     }
 
@@ -133,6 +145,7 @@ let userController = {
   getUserFollowings: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
+        Like,
         { model: Tweet, include: [Reply] },
         { model: User, as: 'Followers' },
         {
@@ -149,32 +162,68 @@ let userController = {
       */
       for (let i = 0; i < user.Followings.length; i++) {
         for (let j = 0; j < user.Followings[i].Followers.length; j++) {
-          if (+user.Followings[i].Followers[j].id === req.user.id) {
+          if (
+            +user.Followings[i].Followers[j].id === _helpers.getUser(req).id
+          ) {
             user.Followings[i].followerHaveCurrentUser = true
           }
         }
       }
-      res.render('user/followings', { user })
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
+      user.Followings.sort((a, b) => b.createdAt - a.createdAt)
+      res.render('user/followings', { user, isCurrentUser, isFollowed })
     })
   },
 
   getUserFollowers: (req, res) => {
     return User.findByPk(req.params.id, {
       include: [
+        Like,
         { model: Tweet, include: [Reply] },
-        { model: User, as: 'Followers' },
+        {
+          model: User,
+          as: 'Followers',
+          include: {
+            model: User,
+            as: 'Followers'
+          }
+        },
         { model: User, as: 'Followings' }
-      ]
+      ],
+      order: [[{ model: User, as: 'Followers' }, 'createdAt', 'DESC']]
     }).then(user => {
-      res.render('user/followers', { user })
+      /*
+      1. 遍歷 user.Follower 找到該 user 的追蹤者
+      2. 遍歷 該 user 追蹤者中的追隨者
+      3. 如果追隨者中包含 user 就傳入 followerHaveCurrentUser 為 true
+    */
+      for (let i = 0; i < user.Followers.length; i++) {
+        for (let j = 0; j < user.Followers[i].Followers.length; j++) {
+          if (+user.Followers[i].Followers[j].id === _helpers.getUser(req).id) {
+            user.Followers[i].followerHaveCurrentUser = true
+          }
+        }
+      }
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
+      user.Followers.sort((a, b) => b.createdAt - a.createdAt)
+      res.render('user/followers', { user, isCurrentUser, isFollowed })
     })
   },
 
   addFollowing: (req, res) => {
+    if (_helpers.getUser(req).id === +req.body.id) return res.redirect('back')
     return Followship.create({
-      followerId: req.user.id,
-      followingId: req.body.id
-    }).then(followship => {
+      followerId: _helpers.getUser(req).id,
+      followingId: +req.body.id
+    }).then(() => {
       return res.redirect('back')
     })
   },
@@ -182,10 +231,56 @@ let userController = {
   removeFollowing: (req, res) => {
     return Followship.destroy({
       where: {
-        followerId: req.user.id,
-        followingId: req.params.followingId
+        followerId: _helpers.getUser(req).id,
+        followingId: +req.params.followingId
       }
     }).then(() => {
+      return res.redirect('back')
+    })
+  },
+
+  getUserLike: (req, res) => {
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Tweet, as: 'LikeTweets', include: [User, Reply, Like] },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
+      ],
+      order: [[{ model: Tweet, as: 'LikeTweets' }, 'createdAt', 'DESC']]
+    }).then(user => {
+      // console.log(user)
+      const likeTweets = user.dataValues.LikeTweets
+      likeTweets.map(tweet => {
+        tweet.Likes.map(like => {
+          if (like.UserId === _helpers.getUser(req).id)
+            return (tweet.likedByUser = true)
+        })
+      })
+      const isCurrentUser =
+        _helpers.getUser(req).id === +req.params.id ? true : false
+      const isFollowed = user.Followers.map(d => d.id).includes(
+        _helpers.getUser(req).id
+      )
+      res.render('user/like', { user, likeTweets, isCurrentUser, isFollowed })
+    })
+  },
+
+  addLike: (req, res) => {
+    return Like.create({
+      UserId: _helpers.getUser(req).id,
+      TweetId: req.params.id
+    }).then(like => {
+      return res.redirect('back')
+    })
+  },
+
+  removeLike: (req, res) => {
+    return Like.destroy({
+      where: {
+        UserId: _helpers.getUser(req).id,
+        TweetId: req.params.id
+      }
+    }).then(like => {
       return res.redirect('back')
     })
   }

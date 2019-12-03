@@ -29,7 +29,8 @@ describe('# followship request', () => {
           .post('/followships')
           .send('id=1')
           .set('Accept', 'application/json')
-          .expect(200)
+          // addFollowing 中使用了 res.redirect('back') 讓使用者體驗較好，故 expect(200) 無法通過
+          .expect(302)
           .end(function(err, res) {
             if (err) return done(err);
             db.User.findByPk(1,{include: [

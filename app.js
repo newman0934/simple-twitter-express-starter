@@ -35,7 +35,7 @@ app.use(methodOverride('_method'))
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
-  res.locals.userAuth = req.session.user
+  res.locals.userAuth = helpers.getUser(req)
   next()
 })
 
@@ -45,3 +45,4 @@ app.use((req, res, next) => {
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 require('./routes')(app, passport)
+module.exports = app

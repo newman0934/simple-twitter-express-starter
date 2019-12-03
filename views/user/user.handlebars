@@ -1,3 +1,4 @@
+{{!-- /users/:id/tweets --}}
 <section class="mt-4" id="user">
   <div class="container">
     <div class="row">
@@ -10,52 +11,75 @@
           </div>
           <p class="mb-2">{{{user.introduction}}}</p>
           <ul class="list-group mb-2">
-            <li class="list-group-item">Tweets {{{user.Tweets.length}}}</li>
-            <li class="list-group-item">Following {{{user.Followings.length}}}</li>
-            <li class="list-group-item">Follower {{{user.Followers.length}}}</li>
-            <li class="list-group-item">like</li>
+            <li class="list-group-item list-group-item-action active">
+              Tweets {{{user.Tweets.length}}}
+            </li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followings">Following
+                {{{user.Followings.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/followers">Follower
+                {{{user.Followers.length}}}</a></li>
+            <li class="list-group-item"><a href="/users/{{{user.id}}}/likes">like {{{user.Likes.length}}}</a></li>
           </ul>
           {{!-- button --}}
           <div class="mb-4">
             {{#if isCurrentUser}}
-              <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
+            <a href="/users/{{{user.id}}}/edit" class="btn btn-outline-primary">Edit Profile</a>
             {{else}}
-              {{#if isFollowed}}
-                <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
-                  <button type="submit" class="btn btn-danger">Unfollow</button>
-                </form>
-              {{else}}
-                <form action="/followships" method="POST">
-                  <input type="number" name="id" value="{{{user.id}}}" class="d-none">
-                  <button type="submit" class="btn btn-primary">Follow</button>
-                </form>
-              {{/if}}
+            {{#if isFollowed}}
+            <form action="/followships/{{{user.id}}}?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger badge-pill">Following</button>
+            </form>
+            {{else}}
+            <form action="/followships" method="POST">
+              <input type="number" name="id" value="{{{user.id}}}" class="d-none">
+              <button type="submit" class="btn btn-primary badge-pill">Follow</button>
+            </form>
+            {{/if}}
             {{/if}}
           </div>
         </div>
       </div>
       <div class="col-md-8">
         {{!-- tweets card --}}
+        {{#if tweets}}
         {{#each tweets}}
-          <div class="card mb-3">
-            <div class="row">
-              <div class="col-auto">
-                <img class="img-responsive center-block" src="{{{../user.avatar}}}" style="height:150px;width:150px">
-              </div>
-              <div class="col">
-                <div class="card-block px-2">
-                  <a href="/users/{{{../user.id}}}/tweets">
-                    <span class="pt-2">{{{../user.name}}}</span>
-                  </a>
-                  <p>{{{this.description}}}</p>
-                  <a href="/tweets/{{{this.id}}}/replies" class="mr-3">Reply({{{this.Replies.length}}})</a>
-                  <a href='#' class="">Like(0)</a>
-                </div>
-              </div>
-              <hr>
+        <div class="card mb-3">
+          <div class="row">
+            <div class="col-auto">
+              <img class="img-responsive center-block" src="{{{../user.avatar}}}" style="height:150px;width:150px">
             </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <a href="/users/{{{../user.id}}}/tweets">
+                  <span class="pt-2">{{{../user.name}}}</span>
+                </a>
+                <p>{{{this.description}}}</p>
+                <a href="/tweets/{{{this.id}}}/replies" class="mr-3"><i class="fas fa-comment-dots"></i>
+                  {{{this.Replies.length}}}</a>
+                {{!-- Like button start --}}
+                {{#if likedByUser}}
+                <form action="/tweets/{{{this.id}}}/unlike" method="POST" class="d-inline ">
+                  <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                  <button type="submit" class="btn text-danger btn-link p-0"><i class="fas fa-heart"></i>
+                    {{{this.Likes.length}}}</button>
+                </form>
+                {{else}}
+                <form action="/tweets/{{{this.id}}}/like" method="POST" class="d-inline ">
+                  <input type="number" name="id" value="{{{this.id}}}" class="d-none">
+                  <button type="submit" class="btn btn-link p-0"><i class="far fa-heart"></i>
+                    {{{this.Likes.length}}}</button>
+                </form>
+                {{/if}}
+                {{!-- Like button end --}}
+              </div>
+            </div>
+            <hr>
           </div>
+        </div>
         {{/each}}
+        {{else}}
+        <h4 class="ml-5 p-2">Oops!! Haven’t posted any tweet yet</h4>
+        {{/if}}
       </div>
     </div>
   </div>
