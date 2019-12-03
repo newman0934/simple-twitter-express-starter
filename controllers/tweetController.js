@@ -25,8 +25,8 @@ const tweetController = {
         sortedUserList = users.slice(0, 10)
         // 如果 user 不是登入者加入 isNotCurrentUser 給 view 判定 follow 按鈕
         sortedUserList.map(user => {
-          if (user.id !== helpers.getUser(req).id)
-            return (user.isNotCurrentUser = true)
+          user.isNotCurrentUser =
+            user.id !== helpers.getUser(req).id ? true : false
         })
       }
     )
