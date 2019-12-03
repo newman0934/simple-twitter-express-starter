@@ -68,7 +68,8 @@ let userController = {
         { model: Tweet, include: [Reply, Like] },
         { model: User, as: 'Followers' },
         { model: User, as: 'Followings' }
-      ]
+      ],
+      order: [[Tweet, 'createdAt', 'DESC']]
     }).then(user => {
       const isFollowed = user.Followers.map(d => d.id).includes(
         _helpers.getUser(req).id

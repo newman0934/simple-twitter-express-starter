@@ -51,7 +51,7 @@
             <div class="col">
               <div class="card-block px-2">
                 <a href="/users/{{{../user.id}}}/tweets">
-                  <span class="pt-2">{{{../user.name}}}</span>
+                  <span class="pt-2">{{{../user.name}}}, {{{moment this.createdAt}}}</span>
                 </a>
                 <p>{{{this.description}}}</p>
                 <a href="/tweets/{{{this.id}}}/replies" class="mr-3"><i class="fas fa-comment-dots"></i>
