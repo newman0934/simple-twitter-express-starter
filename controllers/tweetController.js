@@ -35,7 +35,8 @@ const tweetController = {
           if (+like.UserId === +req.user.id) return (tweet.likedByUser = true)
         })
       })
-      return res.render('tweets', { tweets, sortedUserList })
+      const currentUserId = req.user.id
+      return res.render('tweets', { tweets, sortedUserList, currentUserId })
     })
   },
   postTweets: (req, res) => {
