@@ -6,8 +6,9 @@
           {{!-- create Tweets --}}
           <form action="/tweets" method="POST">
             <div class="md-form mb-3">
-              <textarea name="description" class="md-textarea form-control" rows="3"
+              <textarea id="tweet-input" name="description" class="md-textarea form-control" rows="3"
                 placeholder="What's happening?"></textarea>
+              <span class="badge badge-success" id="tweet-msg-box"></span>
               <button type="submit" class="btn btn-primary badge-pill my-1 d-block mr-0 ml-auto">Tweet</button>
             </div>
           </form>
