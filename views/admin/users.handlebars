@@ -1,5 +1,42 @@
-<h1>admin-users</h1>
-{{#each users}}
-  <h3>{{{this.id}}}</h3>
-  <p>{{{this.description}}}</p>
-{{/each}}
+<h1>會員後台</h1>
+
+<div class="mb-3">
+    <a href="/admin/tweets">
+        <button type="button" class="btn btn-primary">tweets</button>
+    </a>
+
+    <a href="/admin/users">
+        <button type="button" class="btn btn-warning">Users</button>
+    </a>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>avatar</th>
+            <th>name</th>
+            <th>Email</th>
+            <th>role</th>
+            <th>tweets</th>
+            <th>likes</th>
+            <th>Followers</th>
+            <th>Followings</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <th>{{this.id}}</th>
+            <td><img src="{{this.avatar}}" width="50px" height="auto" alt=""></td>
+            <td>{{this.name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.role}}</td>
+            <td>{{this.Tweets.length}}</td>
+            <td>{{this.Likes.length}}</td>
+            <td>{{this.Followers.length}}</td>
+            <td>{{this.Followings.length}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table> 
