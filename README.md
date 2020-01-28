@@ -3,9 +3,9 @@ A simple twitter project built with Node.js, Express, and MySQL
 
 
 ## Quick Look
-![Simple Twitter Project Look1](https://raw.githubusercontent.com/newman0934/simple-twitter-express-starter/master/public/twitter-admin.png)
-![Simple Twitter Project Look2](https://raw.githubusercontent.com/newman0934/simple-twitter-express-starter/master/public/twitter-profile.png)
-![Simple Twitter Project Look3](https://raw.githubusercontent.com/newman0934/simple-twitter-express-starter/master/public/twitter.png)
+![Simple Twitter Project Look1](https://github.com/newman0934/simple-twitter-express-starter/blob/feature/vivian/public/twitter-admin.png)
+![Simple Twitter Project Look2](https://github.com/newman0934/simple-twitter-express-starter/blob/feature/vivian/public/twitter-profile.png)
+![Simple Twitter Project Look3](https://github.com/newman0934/simple-twitter-express-starter/blob/feature/vivian/public/twitter.png)
 
 
 
